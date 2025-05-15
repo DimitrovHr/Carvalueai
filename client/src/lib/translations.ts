@@ -1,5 +1,118 @@
 // Translation object for all application text
 export const translations = {
+  // Pricing
+  pricing: {
+    en: {
+      title: "Pricing",
+      subtitle: "Choose the Right Plan for You",
+      description: "We offer three plans tailored to different needs. Pay with Revolut or PayPal.",
+      trial: "60-Day Trial Available",
+      
+      regularName: "Regular Plan",
+      regularPrice: "€15.99",
+      regularDesc: "Get a current market valuation for your car",
+      regularButton: "Select Regular Plan",
+      regularFeatures: [
+        "Current market value analysis",
+        "Based on Bulgarian market data",
+        "Valid for 1 week"
+      ],
+      regularNotIncluded: [
+        "Historical trend analysis",
+        "Future value prediction",
+        "Competitor price comparison",
+        "Market demand forecast"
+      ],
+      
+      premiumName: "Premium Plan",
+      premiumPrice: "€29.99",
+      premiumDesc: "Comprehensive analysis with trends and forecasts",
+      premiumButton: "Select Premium Plan",
+      premiumFeatures: [
+        "Current market value analysis",
+        "Based on Bulgarian market data",
+        "Valid for 1 week",
+        "3-month historical trend analysis",
+        "1-month future value prediction"
+      ],
+      premiumNotIncluded: [
+        "Competitor price comparison",
+        "Market demand forecast"
+      ],
+      
+      businessName: "Business Plan",
+      businessPrice: "€49.99",
+      businessDesc: "Complete market analysis for professional use",
+      businessButton: "Select Business Plan",
+      businessFeatures: [
+        "Current market value analysis",
+        "Based on Bulgarian market data",
+        "Valid for 1 month",
+        "3-month historical trend analysis",
+        "3-month future value prediction",
+        "Competitor price comparison",
+        "Market demand forecast",
+        "Export to PDF option",
+        "Priority support"
+      ],
+      newBadge: "New"
+    },
+    bg: {
+      title: "Ценоразпис",
+      subtitle: "Изберете подходящия план за Вас",
+      description: "Предлагаме три плана, съобразени с различни нужди. Платете с Revolut или PayPal.",
+      trial: "Наличен 60-дневен пробен период",
+      
+      regularName: "Обикновен План",
+      regularPrice: "€15.99",
+      regularDesc: "Получете текуща пазарна оценка за вашия автомобил",
+      regularButton: "Изберете Обикновен План",
+      regularFeatures: [
+        "Анализ на текущата пазарна стойност",
+        "Базирано на данни от българския пазар",
+        "Валидно за 1 седмица"
+      ],
+      regularNotIncluded: [
+        "Анализ на исторически тенденции",
+        "Прогноза за бъдеща стойност",
+        "Сравнение с конкурентни цени",
+        "Прогноза за пазарно търсене"
+      ],
+      
+      premiumName: "Премиум План",
+      premiumPrice: "€29.99",
+      premiumDesc: "Изчерпателен анализ с тенденции и прогнози",
+      premiumButton: "Изберете Премиум План",
+      premiumFeatures: [
+        "Анализ на текущата пазарна стойност",
+        "Базирано на данни от българския пазар",
+        "Валидно за 1 седмица",
+        "3-месечен анализ на историческите тенденции",
+        "1-месечна прогноза за бъдеща стойност"
+      ],
+      premiumNotIncluded: [
+        "Сравнение с конкурентни цени",
+        "Прогноза за пазарно търсене"
+      ],
+      
+      businessName: "Бизнес План",
+      businessPrice: "€49.99",
+      businessDesc: "Пълен пазарен анализ за професионална употреба",
+      businessButton: "Изберете Бизнес План",
+      businessFeatures: [
+        "Анализ на текущата пазарна стойност",
+        "Базирано на данни от българския пазар",
+        "Валидно за 1 месец",
+        "3-месечен анализ на историческите тенденции",
+        "3-месечна прогноза за бъдеща стойност",
+        "Сравнение с конкурентни цени",
+        "Прогноза за пазарно търсене",
+        "Опция за експорт в PDF",
+        "Приоритетна поддръжка"
+      ],
+      newBadge: "Ново"
+    }
+  },
   // Navigation & Common UI
   common: {
     en: {
