@@ -47,49 +47,49 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
         {/* Trial info banner */}
         <div className="mb-8 p-4 bg-green-800 rounded-lg text-center">
-          <p className="text-white">{t.trialInfo}</p>
+          <p className="text-white font-medium text-base">{t.trialInfo}</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
-            <h3 className="text-lg font-semibold mb-4">CarValueAI</h3>
-            <p className="text-gray-300 text-sm">
+            <h3 className="text-xl font-bold mb-4 text-white">CarValueAI</h3>
+            <p className="text-gray-100 text-base">
               {t.tagline}
             </p>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-200 tracking-wider uppercase mb-4">
+            <h3 className="text-lg font-bold text-white tracking-wider uppercase mb-4">
               {t.company}
             </h3>
             <ul className="space-y-3">
-              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.aboutUs}</Link></li>
-              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.careers}</Link></li>
-              <li><a href="#footer" className="text-gray-300 hover:text-white text-sm" onClick={(e) => {
+              <li><Link href="/" className="text-gray-100 hover:text-white font-medium text-base">{t.aboutUs}</Link></li>
+              <li><Link href="/" className="text-gray-100 hover:text-white font-medium text-base">{t.careers}</Link></li>
+              <li><a href="#footer" className="text-gray-100 hover:text-white font-medium text-base" onClick={(e) => {
                   e.preventDefault();
                   document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
                 }}>{t.contact}</a></li>
-              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.press}</Link></li>
+              <li><Link href="/" className="text-gray-100 hover:text-white font-medium text-base">{t.press}</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-200 tracking-wider uppercase mb-4">
+            <h3 className="text-lg font-bold text-white tracking-wider uppercase mb-4">
               {t.legal}
             </h3>
             <ul className="space-y-3">
-              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.privacyPolicy}</Link></li>
-              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.termsOfService}</Link></li>
-              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.cookiePolicy}</Link></li>
-              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">GDPR</Link></li>
+              <li><Link href="/" className="text-gray-100 hover:text-white font-medium text-base">{t.privacyPolicy}</Link></li>
+              <li><Link href="/" className="text-gray-100 hover:text-white font-medium text-base">{t.termsOfService}</Link></li>
+              <li><Link href="/" className="text-gray-100 hover:text-white font-medium text-base">{t.cookiePolicy}</Link></li>
+              <li><Link href="/" className="text-gray-100 hover:text-white font-medium text-base">GDPR</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-200 tracking-wider uppercase mb-4">
+            <h3 className="text-lg font-bold text-white tracking-wider uppercase mb-4">
               {t.connect}
             </h3>
             <div className="flex space-x-6">
-              <a href="#" className="text-gray-300 hover:text-white">
+              <a href="#" className="text-white hover:text-primary transition-colors">
                 <span className="sr-only">Facebook</span>
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
                 </svg>
               </a>
