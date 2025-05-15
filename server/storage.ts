@@ -9,6 +9,7 @@ import { eq, desc } from "drizzle-orm";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
 import { pool } from "./db";
+import { hashPassword } from "./auth";
 
 // Interface for storage
 export interface IStorage {
@@ -50,10 +51,13 @@ export class DatabaseStorage implements IStorage {
       // Initialize admin user if it doesn't exist
       const adminExists = await this.getUserByUsername("admin");
       if (!adminExists) {
+        // Using the imported hashPassword function
+        
         console.log("Creating default admin user...");
         await this.createUser({
           username: "admin",
-          password: "admin123", // In a production app, use hashed passwords
+          // Hash the password before storing it
+          password: await hashPassword("admin123"),
           email: "admin@carvalueai.com",
           isAdmin: true
         });

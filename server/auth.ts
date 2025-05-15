@@ -14,13 +14,14 @@ declare global {
 
 const scryptAsync = promisify(scrypt);
 
-async function hashPassword(password: string) {
+// Export the hash function so it can be used in other files
+export async function hashPassword(password: string) {
   const salt = randomBytes(16).toString("hex");
   const buf = (await scryptAsync(password, salt, 64)) as Buffer;
   return `${buf.toString("hex")}.${salt}`;
 }
 
-async function comparePasswords(supplied: string, stored: string) {
+export async function comparePasswords(supplied: string, stored: string) {
   const [hashed, salt] = stored.split(".");
   const hashedBuf = Buffer.from(hashed, "hex");
   const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
@@ -30,6 +31,9 @@ async function comparePasswords(supplied: string, stored: string) {
 export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
+  
+  // Session table should be created automatically by connect-pg-simple
+  console.log("Session setup complete");
 
   passport.use(
     new LocalStrategy(async (username, password, done) => {
