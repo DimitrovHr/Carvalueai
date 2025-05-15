@@ -87,7 +87,7 @@ export const carDetailsSchema = z.object({
 });
 
 export const paymentSchema = z.object({
-  planType: z.enum(["regular", "premium"]),
+  planType: z.enum(["regular", "premium", "business"]),
   paymentMethod: z.enum(["paypal", "revolut"]),
   amount: z.number().positive(),
 });

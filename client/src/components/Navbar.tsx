@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Menu, X, User, Globe } from "lucide-react";
@@ -8,11 +8,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { LanguageContext } from "../context/LanguageContext";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
-  const [language, setLanguage] = useState<"en" | "bg">("en");
+  const { language, setLanguage } = useContext(LanguageContext);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);

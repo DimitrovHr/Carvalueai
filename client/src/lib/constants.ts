@@ -11,7 +11,9 @@ export const PRICING = {
     ],
     notIncluded: [
       "Historical trend analysis",
-      "Future value prediction"
+      "Future value prediction",
+      "Competitor price comparison",
+      "Market demand forecast"
     ]
   },
   PREMIUM: {
@@ -24,6 +26,26 @@ export const PRICING = {
       "Valid for 1 week",
       "3-month historical trend analysis",
       "1-month future value prediction"
+    ],
+    notIncluded: [
+      "Competitor price comparison",
+      "Market demand forecast"
+    ]
+  },
+  BUSINESS: {
+    name: "Business Plan",
+    price: 49.99,
+    currency: "EUR",
+    features: [
+      "Current market value analysis",
+      "Based on Bulgarian market data",
+      "Valid for 1 month",
+      "3-month historical trend analysis",
+      "3-month future value prediction",
+      "Competitor price comparison",
+      "Market demand forecast",
+      "Export to PDF option",
+      "Priority support"
     ],
     notIncluded: []
   }

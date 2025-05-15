@@ -11,7 +11,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "./context/LanguageContext";
 import { useState } from "react";
-import Login from "@/pages/Login";
+import Login from "./pages/Login";
 
 function Router() {
   return (
