@@ -142,7 +142,7 @@ export default function Admin() {
         <meta name="description" content="Admin dashboard for CarValueAI" />
       </Helmet>
       
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto py-8 admin-panel">
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-bold">Admin Dashboard</CardTitle>
@@ -156,7 +156,7 @@ export default function Admin() {
               </TabsList>
               
               {/* Inquiries Tab */}
-              <TabsContent value="inquiries">
+              <TabsContent value="inquiries" className="inquiries-list">
                 {isLoadingInquiries ? (
                   <div className="flex justify-center py-8">
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -205,7 +205,7 @@ export default function Admin() {
               </TabsContent>
               
               {/* Settings Tab */}
-              <TabsContent value="settings">
+              <TabsContent value="settings" className="settings-section">
                 <Form {...settingsForm}>
                   <form onSubmit={settingsForm.handleSubmit(onSubmitSettings)} className="space-y-6">
                     <FormField
