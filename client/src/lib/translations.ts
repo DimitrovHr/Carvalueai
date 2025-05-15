@@ -1,6 +1,6 @@
 // Translation object for all application text
 export const translations = {
-  // SEO
+  // SEO translations
   seo: {
     en: {
       defaultTitle: "CarValueAI - Professional Car Valuations for Bulgaria",

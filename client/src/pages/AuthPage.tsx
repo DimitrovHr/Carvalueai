@@ -132,11 +132,25 @@ export default function AuthPage() {
     registerMutation.mutate(registrationData);
   };
 
+  // Schema data for auth page
+  const authPageSchema = {
+    "@type": "WebPage",
+    name: t.seo.authTitle,
+    description: t.seo.authDescription,
+    provider: {
+      "@type": "Organization",
+      name: "CarValueAI",
+      sameAs: "https://carvalueai.bg"
+    }
+  };
+
   return (
     <>
-      <Helmet>
-        <title>CarValueAI - {t.title}</title>
-      </Helmet>
+      <SEOMetadata
+        title={t.seo.authTitle}
+        description={t.seo.authDescription}
+        schemaData={authPageSchema}
+      />
       <div className="flex min-h-screen">
         {/* Auth Forms */}
         <div className="flex flex-col items-center justify-center w-full lg:w-1/2 p-8">
