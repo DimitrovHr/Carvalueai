@@ -33,19 +33,19 @@ export default function PricingCards() {
               <div className="px-6 py-8 bg-white sm:p-10 sm:pb-6 flex-grow">
                 <div>
                   <h3 className="inline-flex px-4 py-1 rounded-full text-sm font-semibold tracking-wide uppercase bg-blue-100 text-primary">
-                    {t.regular.name}
+                    {t.pricing.regularName}
                   </h3>
                 </div>
                 <div className="mt-4 flex items-baseline text-6xl font-extrabold">
-                  {t.regular.price}
+                  {t.pricing.regularPrice}
                 </div>
                 <p className="mt-5 text-lg text-neutral-dark">
-                  {t.regular.description}
+                  {t.pricing.regularDesc}
                 </p>
               </div>
               <div className="px-6 pt-6 pb-8 bg-white sm:p-10 sm:pt-6">
                 <ul className="space-y-4">
-                  {t.regular.features.map((feature, index) => (
+                  {t.pricing.regularFeatures.map((feature, index) => (
                     <li key={`regular-feature-${index}`} className="flex items-start">
                       <div className="flex-shrink-0">
                         <Check className="h-5 w-5 text-green-500" />
@@ -53,7 +53,7 @@ export default function PricingCards() {
                       <p className="ml-3 text-base text-neutral-dark">{feature}</p>
                     </li>
                   ))}
-                  {t.regular.notIncluded.map((feature, index) => (
+                  {t.pricing.regularNotIncluded.map((feature, index) => (
                     <li key={`regular-not-included-${index}`} className="flex items-start">
                       <div className="flex-shrink-0">
                         <X className="h-5 w-5 text-red-500" />
@@ -70,7 +70,7 @@ export default function PricingCards() {
                       data-plan="regular"
                       data-price="15.99"
                     >
-                      {t.regular.button}
+                      {t.pricing.regularButton}
                     </Button>
                   </Link>
                 </div>
@@ -84,19 +84,19 @@ export default function PricingCards() {
               <div className="px-6 py-8 bg-white sm:p-10 sm:pb-6 flex-grow">
                 <div>
                   <h3 className="inline-flex px-4 py-1 rounded-full text-sm font-semibold tracking-wide uppercase bg-indigo-100 text-accent">
-                    {t.premium.name}
+                    {t.pricing.premiumName}
                   </h3>
                 </div>
                 <div className="mt-4 flex items-baseline text-6xl font-extrabold">
-                  {t.premium.price}
+                  {t.pricing.premiumPrice}
                 </div>
                 <p className="mt-5 text-lg text-neutral-dark">
-                  {t.premium.description}
+                  {t.pricing.premiumDesc}
                 </p>
               </div>
               <div className="px-6 pt-6 pb-8 bg-white sm:p-10 sm:pt-6">
                 <ul className="space-y-4">
-                  {t.premium.features.map((feature, index) => (
+                  {t.pricing.premiumFeatures.map((feature, index) => (
                     <li key={`premium-feature-${index}`} className="flex items-start">
                       <div className="flex-shrink-0">
                         <Check className="h-5 w-5 text-green-500" />
@@ -104,7 +104,7 @@ export default function PricingCards() {
                       <p className="ml-3 text-base text-neutral-dark">{feature}</p>
                     </li>
                   ))}
-                  {t.premium.notIncluded.map((feature, index) => (
+                  {t.pricing.premiumNotIncluded.map((feature, index) => (
                     <li key={`premium-not-included-${index}`} className="flex items-start">
                       <div className="flex-shrink-0">
                         <X className="h-5 w-5 text-red-500" />
@@ -120,7 +120,7 @@ export default function PricingCards() {
                       data-plan="premium"
                       data-price="29.99"
                     >
-                      {t.premium.button}
+                      {t.pricing.premiumButton}
                     </Button>
                   </Link>
                 </div>
@@ -134,20 +134,20 @@ export default function PricingCards() {
               <div className="px-6 py-8 bg-white sm:p-10 sm:pb-6 flex-grow">
                 <div className="flex justify-between">
                   <h3 className="inline-flex px-4 py-1 rounded-full text-sm font-semibold tracking-wide uppercase bg-accent/20 text-accent">
-                    {t.business.name}
+                    {t.pricing.businessName}
                   </h3>
-                  <Badge variant="default" className="bg-accent text-white">New</Badge>
+                  <Badge variant="default" className="bg-accent text-white">{t.pricing.newBadge}</Badge>
                 </div>
                 <div className="mt-4 flex items-baseline text-6xl font-extrabold">
-                  {t.business.price}
+                  {t.pricing.businessPrice}
                 </div>
                 <p className="mt-5 text-lg text-neutral-dark">
-                  {t.business.description}
+                  {t.pricing.businessDesc}
                 </p>
               </div>
               <div className="px-6 pt-6 pb-8 bg-white sm:p-10 sm:pt-6">
                 <ul className="space-y-4">
-                  {t.business.features.map((feature, index) => (
+                  {t.pricing.businessFeatures.map((feature, index) => (
                     <li key={`business-feature-${index}`} className="flex items-start">
                       <div className="flex-shrink-0">
                         <Check className="h-5 w-5 text-green-500" />
@@ -163,7 +163,7 @@ export default function PricingCards() {
                       data-plan="business"
                       data-price="49.99"
                     >
-                      {t.business.button}
+                      {t.pricing.businessButton}
                     </Button>
                   </Link>
                 </div>

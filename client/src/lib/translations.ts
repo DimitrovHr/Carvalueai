@@ -555,6 +555,7 @@ export function useTranslations(language: "en" | "bg") {
   return {
     common: translations.common[language],
     home: translations.home[language],
+    pricing: translations.pricing[language],
     valuation: translations.valuation[language],
     auth: translations.auth[language],
     admin: translations.admin[language],
