@@ -110,26 +110,47 @@ export default function Navbar() {
               ))}
             </div>
             
-            {/* Login and Admin buttons */}
+            {/* User account menu */}
             <div className="ml-8 flex items-center space-x-4">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="flex items-center">
                     <User className="h-4 w-4 mr-2" />
-                    {t.login}
+                    {user ? user.username : t.login}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
-                    <Link href="/login" className="w-full">
-                      {t.login}
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="/admin" className="w-full">
-                      {t.adminLogin}
-                    </Link>
-                  </DropdownMenuItem>
+                  {user ? (
+                    <>
+                      <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
+                        {t.welcome}, {user.username}
+                      </div>
+                      <DropdownMenuSeparator />
+                      {user.isAdmin && (
+                        <DropdownMenuItem asChild>
+                          <Link href="/admin" className="w-full">
+                            {t.admin}
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuItem asChild>
+                        <Link href="/valuation" className="w-full">
+                          {t.dashboard}
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout} className="text-red-500">
+                        <LogOut className="h-4 w-4 mr-2" />
+                        {t.logout}
+                      </DropdownMenuItem>
+                    </>
+                  ) : (
+                    <DropdownMenuItem asChild>
+                      <Link href="/auth" className="w-full">
+                        {t.login}
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -169,20 +190,44 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="pt-4 pb-3 border-t border-gray-200 space-y-2">
-              <Link 
-                href="/login" 
-                className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-neutral-dark"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t.login}
-              </Link>
-              <Link 
-                href="/admin"
-                className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-neutral-dark"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {t.adminLogin}
-              </Link>
+              {user ? (
+                <>
+                  {user.isAdmin && (
+                    <Link 
+                      href="/admin"
+                      className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-neutral-dark"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {t.admin}
+                    </Link>
+                  )}
+                  <Link 
+                    href="/valuation"
+                    className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-neutral-dark"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {t.dashboard}
+                  </Link>
+                  <button 
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-red-500 w-full text-left"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    {t.logout}
+                  </button>
+                </>
+              ) : (
+                <Link 
+                  href="/auth" 
+                  className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-neutral-dark"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {t.login}
+                </Link>
+              )}
             </div>
           </div>
         </div>

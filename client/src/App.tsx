@@ -11,7 +11,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "./context/LanguageContext";
 import { useState } from "react";
-import Login from "./pages/Login";
+import AuthPage from "./pages/AuthPage";
 import { AuthProvider } from "./hooks/use-auth";
 import { ProtectedRoute } from "./lib/protected-route";
 
@@ -19,7 +19,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/auth" component={Login} />
+      <Route path="/auth" component={AuthPage} />
       <ProtectedRoute path="/valuation" component={CarValuationForm} />
       <ProtectedRoute path="/admin" component={Admin} adminOnly={true} />
       <Route component={NotFound} />
