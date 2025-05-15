@@ -43,7 +43,7 @@ export default function Footer() {
   const t = translations[language as "en" | "bg"];
 
   return (
-    <footer className="bg-neutral-dark text-white" id="footer">
+    <footer className="bg-neutral-dark text-black" id="footer">
       <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
         {/* Trial info banner */}
         <div className="mb-8 p-4 bg-green-800 rounded-lg text-center">
@@ -52,27 +52,27 @@ export default function Footer() {
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
-            <h3 className="text-xl font-bold mb-4 text-white">CarValueAI</h3>
-            <p className="text-gray-100 text-base">
+            <h3 className="text-xl font-bold mb-4 text-black">CarValueAI</h3>
+            <p className="text-black text-base">
               {t.tagline}
             </p>
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white tracking-wider uppercase mb-4">
+            <h3 className="text-lg font-bold text-black tracking-wider uppercase mb-4">
               {t.company}
             </h3>
             <ul className="space-y-3">
-              <li><Link href="/" className="text-gray-100 hover:text-white font-medium text-base">{t.aboutUs}</Link></li>
-              <li><Link href="/" className="text-gray-100 hover:text-white font-medium text-base">{t.careers}</Link></li>
-              <li><a href="#footer" className="text-gray-100 hover:text-white font-medium text-base" onClick={(e) => {
+              <li><Link href="/" className="text-black hover:text-primary font-medium text-base">{t.aboutUs}</Link></li>
+              <li><Link href="/" className="text-black hover:text-primary font-medium text-base">{t.careers}</Link></li>
+              <li><a href="#footer" className="text-black hover:text-primary font-medium text-base" onClick={(e) => {
                   e.preventDefault();
                   document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
                 }}>{t.contact}</a></li>
-              <li><Link href="/" className="text-gray-100 hover:text-white font-medium text-base">{t.press}</Link></li>
+              <li><Link href="/" className="text-black hover:text-primary font-medium text-base">{t.press}</Link></li>
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white tracking-wider uppercase mb-4">
+            <h3 className="text-lg font-bold text-black tracking-wider uppercase mb-4">
               {t.legal}
             </h3>
             <ul className="space-y-3">
@@ -83,7 +83,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white tracking-wider uppercase mb-4">
+            <h3 className="text-lg font-bold text-black tracking-wider uppercase mb-4">
               {t.connect}
             </h3>
             <div className="flex space-x-6">
