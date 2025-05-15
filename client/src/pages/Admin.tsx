@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ValuationChart from "@/components/ValuationChart";
+import MarketDataManagement from "@/components/MarketDataManagement";
 import { Badge } from "@/components/ui/badge";
 import { FUEL_TYPES, TRANSMISSION_TYPES, INQUIRY_STATUS } from "@/lib/constants";
 
@@ -698,6 +699,11 @@ export default function Admin() {
                     </div>
                   </div>
                 </div>
+              </TabsContent>
+              
+              {/* Market Data Tab */}
+              <TabsContent value="market-data">
+                <MarketDataManagement inquiries={inquiries} />
               </TabsContent>
             </Tabs>
           </CardContent>
