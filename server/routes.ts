@@ -103,6 +103,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Update the inquiry with payment details
+      let valuationResult;
+      
+      // Generate valuation result based on plan type
+      if (planType === "premium") {
+        valuationResult = generatePremiumValuationResult(inquiry);
+      } else if (planType === "business") {
+        valuationResult = generateBusinessValuationResult(inquiry);
+      } else {
+        valuationResult = generateRegularValuationResult(inquiry);
+      }
+      
       const updatedInquiry = await storage.updateInquiry(parseInt(inquiryId), {
         planType,
         paymentId,
@@ -110,10 +121,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         paymentAmount: amount,
         paymentCompleted: true,
         status: "completed",
-        // Generate valuation result based on plan type
-        valuationResult: planType === "premium" 
-          ? generatePremiumValuationResult(inquiry)
-          : generateRegularValuationResult(inquiry)
+        valuationResult
       });
 
       return res.status(200).json(updatedInquiry);
@@ -165,7 +173,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const carDetails = carDetailsSchema.parse(req.body);
       
-      // Generate a test valuation result
+      // Generate test valuation results for all plan types
       const regularResult = generateRegularValuationResult({
         ...carDetails,
         id: 0,
@@ -181,10 +189,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         planType: "premium",
         status: "test"
       });
+
+      const businessResult = generateBusinessValuationResult({
+        ...carDetails,
+        id: 0,
+        createdAt: new Date(),
+        planType: "business",
+        status: "test"
+      });
       
       return res.json({
         regular: regularResult,
-        premium: premiumResult
+        premium: premiumResult,
+        business: businessResult
       });
     } catch (error) {
       if (error instanceof ZodError) {
@@ -294,6 +311,88 @@ function generatePremiumValuationResult(inquiry: any) {
       historicalTrendPercentage: Math.round(historicalTrend * 10) / 10,
       bestTimeToSell: historicalTrend > 2 ? "Within the next 4-6 weeks" : "Hold for 2-3 months",
       marketCondition: historicalTrend > 0 ? "Rising" : "Declining"
+    }
+  };
+}
+
+function generateBusinessValuationResult(inquiry: any) {
+  // Get premium valuation first and extend it
+  const premiumResult = generatePremiumValuationResult(inquiry);
+  const marketValue = premiumResult.marketValue;
+  
+  // Generate 3-month future prediction instead of just 1 month
+  const oneMonthFuture = marketValue * 1.02;
+  const twoMonthsFuture = oneMonthFuture * 0.98; // slight decline
+  const threeMonthsFuture = twoMonthsFuture * 0.99; // continued slight decline
+  
+  // Generate competitor pricing comparison
+  const competitorPricing = [
+    { dealer: "Dealership A", price: Math.round(marketValue * 1.10), comparison: "+10%" },
+    { dealer: "Dealership B", price: Math.round(marketValue * 0.95), comparison: "-5%" },
+    { dealer: "Dealership C", price: Math.round(marketValue * 1.05), comparison: "+5%" },
+    { dealer: "Private sellers avg.", price: Math.round(marketValue * 0.92), comparison: "-8%" }
+  ];
+  
+  // Generate market demand forecast
+  const seasonalityFactor = Math.round(Math.random() * 10);
+  const fuelEconomyFactor = Math.round(Math.random() * 10);
+  const brandPopularityFactor = Math.round(Math.random() * 10);
+  const marketTrendFactor = Math.round(Math.random() * 10);
+  
+  const demandFactors = [
+    { factor: "Seasonality", score: seasonalityFactor },
+    { factor: "Fuel Economy", score: fuelEconomyFactor },
+    { factor: "Brand Popularity", score: brandPopularityFactor },
+    { factor: "Market Trend", score: marketTrendFactor }
+  ];
+  
+  const totalDemandScore = demandFactors.reduce((sum, item) => sum + item.score, 0);
+  const avgDemandScore = totalDemandScore / demandFactors.length;
+  
+  // Determine demand level
+  let demandLevel;
+  if (avgDemandScore >= 7) {
+    demandLevel = "High";
+  } else if (avgDemandScore >= 5) {
+    demandLevel = "Medium";
+  } else {
+    demandLevel = "Low";
+  }
+  
+  // Update validUntil to be 30 days instead of 7
+  const validUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  
+  return {
+    ...premiumResult,
+    validUntil,
+    // Extend historical data with future predictions
+    historicalData: [
+      ...premiumResult.historicalData,
+      { month: "Next Month", value: Math.round(oneMonthFuture) },
+      { month: "In 2 Months", value: Math.round(twoMonthsFuture) },
+      { month: "In 3 Months", value: Math.round(threeMonthsFuture) }
+    ],
+    futurePrediction: {
+      oneMonth: Math.round(oneMonthFuture),
+      twoMonths: Math.round(twoMonthsFuture),
+      threeMonths: Math.round(threeMonthsFuture),
+      trendDescription: "Initial increase followed by gradual decline over 3 months"
+    },
+    competitorAnalysis: {
+      pricingComparison: competitorPricing,
+      marketPosition: "Mid-range",
+      priceAdvantage: Math.round(((marketValue / (marketValue * 1.05)) - 1) * 100)
+    },
+    marketDemand: {
+      demandLevel,
+      demandScore: Math.round(avgDemandScore * 10) / 10,
+      factors: demandFactors,
+      seasonalTrends: seasonalityFactor > 6 ? "Positive seasonal demand" : "Low seasonal demand",
+      bestSellingPeriod: seasonalityFactor > 6 ? "Current" : "Wait 2-3 months"
+    },
+    exportOptions: {
+      pdfReportAvailable: true,
+      pdfReportUrl: `/api/reports/${inquiry.id}/export-pdf`
     }
   };
 }
