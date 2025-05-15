@@ -20,7 +20,7 @@ export interface IStorage {
   // Car inquiry methods
   getInquiry(id: number): Promise<CarInquiry | undefined>;
   getAllInquiries(): Promise<CarInquiry[]>;
-  createInquiry(inquiry: Partial<InsertCarInquiry>): Promise<CarInquiry>;
+  createInquiry(inquiry: Partial<InsertCarInquiry> & { userId?: number | null, trialPeriod?: boolean }): Promise<CarInquiry>;
   updateInquiry(id: number, data: Partial<CarInquiry>): Promise<CarInquiry>;
   
   // Admin settings methods
@@ -137,7 +137,7 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async createInquiry(inquiry: Partial<InsertCarInquiry>): Promise<CarInquiry> {
+  async createInquiry(inquiry: Partial<InsertCarInquiry> & { userId?: number | null, trialPeriod?: boolean }): Promise<CarInquiry> {
     try {
       const [newInquiry] = await db.insert(carInquiries).values({
         vin: inquiry.vin || '',

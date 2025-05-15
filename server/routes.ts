@@ -6,6 +6,7 @@ import { carDetailsSchema, paymentSchema, adminSettingsFormSchema } from "@share
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 import nodemailer from "nodemailer";
+import { setupAuth } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes
