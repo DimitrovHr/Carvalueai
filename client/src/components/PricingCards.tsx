@@ -141,7 +141,7 @@ export default function PricingCards() {
                 <div className="mt-4 flex items-baseline text-6xl font-extrabold">
                   {t.pricing.businessPrice}
                 </div>
-                <p className="mt-5 text-lg text-neutral-dark">
+                <p className="mt-5 text-lg text-neutral-dark font-medium">
                   {t.pricing.businessDesc}
                 </p>
               </div>
@@ -152,14 +152,14 @@ export default function PricingCards() {
                       <div className="flex-shrink-0">
                         <Check className="h-5 w-5 text-green-500" />
                       </div>
-                      <p className="ml-3 text-base text-neutral-dark">{feature}</p>
+                      <p className="ml-3 text-base text-neutral-dark font-medium">{feature}</p>
                     </li>
                   ))}
                 </ul>
                 <div className="mt-8">
                   <Link href="/valuation">
                     <Button 
-                      className="w-full bg-accent hover:bg-accent/90" 
+                      className="w-full bg-accent hover:bg-accent/90 text-white font-semibold" 
                       data-plan="business"
                       data-price="49.99"
                     >

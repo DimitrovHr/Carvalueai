@@ -52,12 +52,11 @@ export default function Navbar() {
             {/* Language toggle */}
             <button 
               onClick={toggleLanguage}
-              className="ml-3 p-1 rounded-full hover:bg-gray-100 focus:outline-none"
+              className="ml-3 p-1 px-3 border border-primary rounded-full hover:bg-primary/10 focus:outline-none flex items-center transition-all duration-200"
               aria-label="Toggle language"
             >
               <Globe className="h-5 w-5 text-primary" />
-              <span className="sr-only">Toggle language</span>
-              <span className="ml-1 text-xs">{language.toUpperCase()}</span>
+              <span className="ml-1.5 font-medium text-primary">{language === "en" ? "EN" : "BG"}</span>
             </button>
             {/* Help button */}
             <OnboardingButton tourType="homepage" className="ml-2" />
@@ -162,6 +161,18 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="pt-4 pb-3 border-t border-gray-200 space-y-2">
+              {/* Language switcher for mobile */}
+              <button 
+                onClick={() => {
+                  toggleLanguage(); 
+                  setIsMenuOpen(false);
+                }}
+                className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-primary w-full text-left"
+              >
+                <Globe className="h-5 w-5 mr-2" />
+                {language === "en" ? "Switch to Bulgarian" : "Превключи на английски"}
+              </button>
+              
               {user ? (
                 <>
                   {user.isAdmin && (
