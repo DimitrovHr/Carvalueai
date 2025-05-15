@@ -647,7 +647,13 @@ export default function CarValuationForm() {
                           <div className="mt-6 border-t border-gray-300 pt-6">
                             <h4 className="text-xl font-semibold text-neutral-dark">Market Trend Analysis</h4>
                             <div className="mt-4">
-                              <ValuationChart data={inquiryData.valuationResult.historicalData} />
+                              <ValuationChart 
+                                data={inquiryData.valuationResult.historicalData}
+                                forecast={inquiryData.valuationResult.futurePrediction?.forecastData || []}
+                                marketTrend={inquiryData.valuationResult.marketInsights?.historicalTrendPercentage || 0}
+                                compareData={inquiryData.valuationResult.marketInsights?.comparisonData || []}
+                                chartType={inquiryData.planType === 'business' ? 'comparison' : 'bar'}
+                              />
                               
                               <div className="mt-4 bg-white p-4 rounded-md shadow-sm validity-period">
                                 <h5 className="font-medium text-neutral-dark">Market Insights</h5>

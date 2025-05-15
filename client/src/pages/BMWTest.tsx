@@ -3,8 +3,9 @@ import { Helmet } from "react-helmet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Download, Mail } from "lucide-react";
+import { Loader2, Download, Mail, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import ValuationChart from "@/components/ValuationChart";
 
 export default function BMWTest() {
   const [isLoading, setIsLoading] = useState(true);

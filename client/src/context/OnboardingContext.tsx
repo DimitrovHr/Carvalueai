@@ -41,18 +41,18 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
             placement: 'bottom',
           },
           {
-            target: '.pricing-section',
-            content: 'Check out our different pricing plans to find one that suits your needs.',
-            placement: 'top',
-          },
-          {
             target: '.cta-button',
-            content: 'Click here to get started with your car valuation.',
+            content: 'Click here to start your car valuation. You\'ll need your VIN number and basic vehicle information to get an accurate estimate.',
             placement: 'bottom',
           },
           {
             target: '.how-it-works',
-            content: 'Learn more about our valuation process and what makes our service special.',
+            content: 'Our 3-step process makes it easy to get an accurate valuation based on actual Bulgarian market data.',
+            placement: 'top',
+          },
+          {
+            target: '.pricing-section',
+            content: 'Choose from three different pricing plans. We\'re currently offering a 60-day trial for the first 50 registered users!',
             placement: 'top',
           },
         ];
@@ -65,17 +65,17 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
           },
           {
             target: '.vin-input',
-            content: 'Enter your Vehicle Identification Number (VIN) for the most accurate valuation.',
+            content: 'Enter your Vehicle Identification Number (VIN) found on your registration card or windshield. This 17-character code uniquely identifies your vehicle.',
             placement: 'bottom',
           },
           {
             target: '.mileage-input',
-            content: 'Your current mileage helps us determine the condition and value of your vehicle.',
+            content: 'Your current mileage is crucial for an accurate valuation. Higher mileage typically reduces value, while lower mileage can increase it.',
             placement: 'bottom',
           },
           {
             target: '.submit-button',
-            content: 'After filling in all the details, click here to proceed to the payment step.',
+            content: 'After filling in all required details, click here to proceed to the next step where you\'ll select your valuation plan.',
             placement: 'bottom',
           },
         ];
@@ -83,45 +83,45 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
         return [
           {
             target: '.valuation-result',
-            content: 'Here\'s your car valuation result based on current market data.',
+            content: 'Congratulations! Here\'s your car valuation result based on current Bulgarian market data and our proprietary algorithm.',
             disableBeacon: true,
           },
           {
             target: '.market-value',
-            content: 'This is the estimated market value of your vehicle.',
+            content: 'This is the estimated market value of your vehicle. This figure represents what your car would likely sell for in the current Bulgarian market.',
+            placement: 'bottom',
+          },
+          {
+            target: '.validity-period',
+            content: 'Market insights show historical trends and future predictions for your vehicle\'s value. These trends help you decide the best time to sell.',
             placement: 'bottom',
           },
           {
             target: '.report-actions',
-            content: 'You can download or email your valuation report for future reference.',
+            content: 'You can download a detailed PDF report or have it emailed to you for future reference. The report includes comprehensive market analysis and comparable vehicles.',
             placement: 'top',
-          },
-          {
-            target: '.validity-period',
-            content: 'Your valuation is valid for this period. Market values can change over time.',
-            placement: 'bottom',
           },
         ];
       case 'admin':
         return [
           {
             target: '.admin-panel',
-            content: 'Welcome to the admin panel. Here you can manage all car valuations and settings.',
+            content: 'Welcome to the admin panel. This secure area is only accessible to administrators and provides tools to manage the application.',
             disableBeacon: true,
           },
           {
             target: '.inquiries-list',
-            content: 'This is a list of all car valuation inquiries submitted by users.',
+            content: 'Here you can view and manage all car valuation inquiries submitted by users. Track status, view details, and manage customer valuations.',
             placement: 'bottom',
           },
           {
             target: '.settings-section',
-            content: 'Configure application settings like notification emails and API integrations.',
+            content: 'Configure notification emails to receive alerts about new valuations. You can also adjust the AI model settings used for generating valuations.',
             placement: 'top',
           },
           {
-            target: '.stats-dashboard',
-            content: 'View statistics about valuations, user activity, and revenue.',
+            target: '.testing',
+            content: 'This section allows you to test the valuation algorithm with sample data. Useful for verifying the accuracy of valuations before implementing changes.',
             placement: 'bottom',
           },
         ];
@@ -181,14 +181,28 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
 
   // Auto-start tour when path changes if not completed
   useEffect(() => {
+    // Check if it's the user's first time using the app
+    const isFirstVisit = localStorage.getItem('firstVisit') === null;
+    
+    if (isFirstVisit) {
+      // Mark that the user has visited the app before
+      localStorage.setItem('firstVisit', 'false');
+      
+      // Show a welcome toast for first-time users
+      toast({
+        title: "Welcome to CarValueAI!",
+        description: "We've prepared a guided tour to help you get started. Click the help icons for guidance anytime.",
+      });
+    }
+    
     // Determine which tour to start based on the current path
     if (location === '/' && !completedTours.includes('homepage')) {
       // Delay slightly to ensure elements are rendered
-      setTimeout(() => startTour('homepage'), 1000);
+      setTimeout(() => startTour('homepage'), 1500);
     } else if (location === '/valuation' && !completedTours.includes('valuation')) {
-      setTimeout(() => startTour('valuation'), 1000);
+      setTimeout(() => startTour('valuation'), 1500);
     } else if (location.includes('/admin') && !completedTours.includes('admin')) {
-      setTimeout(() => startTour('admin'), 1000);
+      setTimeout(() => startTour('admin'), 1500);
     }
     // Results tour is typically started after payment completion, not on path change
   }, [location]);

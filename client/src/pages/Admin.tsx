@@ -254,7 +254,7 @@ export default function Admin() {
               </TabsContent>
               
               {/* Testing Tab */}
-              <TabsContent value="testing">
+              <TabsContent value="testing" className="testing">
                 <div className="space-y-6">
                   <div>
                     <h4 className="text-lg font-medium text-neutral-dark">Test Valuation</h4>
