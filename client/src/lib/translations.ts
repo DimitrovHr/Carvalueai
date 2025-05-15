@@ -589,6 +589,7 @@ export const translations = {
 // Helper function to get translations
 export function useTranslations(language: "en" | "bg") {
   return {
+    seo: translations.seo[language],
     common: translations.common[language],
     home: translations.home[language],
     pricing: translations.pricing[language],

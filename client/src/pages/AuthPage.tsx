@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,6 +19,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useContext } from "react";
 import { LanguageContext } from "../context/LanguageContext";
 import { Loader2 } from "lucide-react";
+import SEOMetadata from "@/components/SEOMetadata";
+import { useTranslation } from "@/hooks/use-translation";
 
 // Form schemas
 const loginSchema = z.object({
