@@ -1,41 +1,87 @@
 import { Link } from "wouter";
+import { useContext } from "react";
+import { LanguageContext } from "../context/LanguageContext";
 
 export default function Footer() {
+  const { language } = useContext(LanguageContext);
+  
+  const translations: Record<string, Record<string, string>> = {
+    en: {
+      tagline: "The most accurate car valuation service for the Bulgarian market, powered by advanced AI technology.",
+      company: "Company",
+      aboutUs: "About Us",
+      careers: "Careers",
+      contact: "Contact",
+      press: "Press",
+      legal: "Legal",
+      privacyPolicy: "Privacy Policy",
+      termsOfService: "Terms of Service",
+      cookiePolicy: "Cookie Policy",
+      gdpr: "GDPR",
+      connect: "Connect",
+      allRightsReserved: "All rights reserved.",
+      trialInfo: "Try our 60-day free trial - limited to 50 clients only!"
+    },
+    bg: {
+      tagline: "Най-точната услуга за оценка на автомобили за българския пазар, базирана на съвременна AI технология.",
+      company: "Компания",
+      aboutUs: "За нас",
+      careers: "Кариери",
+      contact: "Контакт",
+      press: "Преса",
+      legal: "Правна информация",
+      privacyPolicy: "Политика за поверителност",
+      termsOfService: "Общи условия",
+      cookiePolicy: "Политика за бисквитки",
+      gdpr: "GDPR",
+      connect: "Свържете се",
+      allRightsReserved: "Всички права запазени.",
+      trialInfo: "Пробвайте нашия 60-дневен безплатен период - ограничен до само 50 клиента!"
+    }
+  };
+
+  const t = translations[language as "en" | "bg"];
+
   return (
     <footer className="bg-neutral-dark text-white" id="footer">
       <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+        {/* Trial info banner */}
+        <div className="mb-8 p-4 bg-green-800 rounded-lg text-center">
+          <p className="text-white">{t.trialInfo}</p>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <h3 className="text-lg font-semibold mb-4">CarValueAI</h3>
             <p className="text-gray-300 text-sm">
-              The most accurate car valuation service for the Bulgarian market, powered by advanced AI technology.
+              {t.tagline}
             </p>
           </div>
           <div>
             <h3 className="text-sm font-semibold text-gray-200 tracking-wider uppercase mb-4">
-              Company
+              {t.company}
             </h3>
             <ul className="space-y-3">
-              <li><Link href="/"><a className="text-gray-300 hover:text-white text-sm">About Us</a></Link></li>
-              <li><Link href="/"><a className="text-gray-300 hover:text-white text-sm">Careers</a></Link></li>
-              <li><Link href="/#footer"><a className="text-gray-300 hover:text-white text-sm">Contact</a></Link></li>
-              <li><Link href="/"><a className="text-gray-300 hover:text-white text-sm">Press</a></Link></li>
+              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.aboutUs}</Link></li>
+              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.careers}</Link></li>
+              <li><Link href="/#footer" className="text-gray-300 hover:text-white text-sm">{t.contact}</Link></li>
+              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.press}</Link></li>
             </ul>
           </div>
           <div>
             <h3 className="text-sm font-semibold text-gray-200 tracking-wider uppercase mb-4">
-              Legal
+              {t.legal}
             </h3>
             <ul className="space-y-3">
-              <li><Link href="/"><a className="text-gray-300 hover:text-white text-sm">Privacy Policy</a></Link></li>
-              <li><Link href="/"><a className="text-gray-300 hover:text-white text-sm">Terms of Service</a></Link></li>
-              <li><Link href="/"><a className="text-gray-300 hover:text-white text-sm">Cookie Policy</a></Link></li>
-              <li><Link href="/"><a className="text-gray-300 hover:text-white text-sm">GDPR</a></Link></li>
+              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.privacyPolicy}</Link></li>
+              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.termsOfService}</Link></li>
+              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.cookiePolicy}</Link></li>
+              <li><Link href="/" className="text-gray-300 hover:text-white text-sm">GDPR</Link></li>
             </ul>
           </div>
           <div>
             <h3 className="text-sm font-semibold text-gray-200 tracking-wider uppercase mb-4">
-              Connect
+              {t.connect}
             </h3>
             <div className="flex space-x-6">
               <a href="#" className="text-gray-300 hover:text-white">
@@ -70,7 +116,7 @@ export default function Footer() {
         </div>
         <div className="mt-8 pt-8 border-t border-gray-700">
           <p className="text-center text-gray-300 text-sm">
-            &copy; {new Date().getFullYear()} CarValueAI. All rights reserved.
+            &copy; {new Date().getFullYear()} CarValueAI. {t.allRightsReserved}
           </p>
         </div>
       </div>

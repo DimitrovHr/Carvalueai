@@ -9,6 +9,9 @@ import Admin from "@/pages/Admin";
 import CarValuationForm from "@/pages/CarValuationForm";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { LanguageProvider } from "./context/LanguageContext";
+import { useState } from "react";
+import Login from "@/pages/Login";
 
 function Router() {
   return (
@@ -16,6 +19,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/valuation" component={CarValuationForm} />
       <Route path="/admin" component={Admin} />
+      <Route path="/login" component={Login} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -24,15 +28,17 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <div className="flex flex-col min-h-screen">
-          <Navbar />
-          <main className="flex-grow">
-            <Router />
-          </main>
-          <Footer />
-        </div>
-      </TooltipProvider>
+      <LanguageProvider>
+        <TooltipProvider>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-grow">
+              <Router />
+            </main>
+            <Footer />
+          </div>
+        </TooltipProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }
