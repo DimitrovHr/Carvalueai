@@ -12,6 +12,7 @@ import {
   FormMessage,
   FormDescription 
 } from "@/components/ui/form";
+import OnboardingButton from "@/components/OnboardingButton";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -179,9 +180,12 @@ export default function CarValuationForm() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-base text-primary font-semibold tracking-wide uppercase">Valuation</h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-neutral-dark sm:text-4xl">
-              Get Your Car's Value
-            </p>
+            <div className="flex items-center justify-center mt-2">
+              <p className="text-3xl leading-8 font-extrabold tracking-tight text-neutral-dark sm:text-4xl">
+                Get Your Car's Value
+              </p>
+              <OnboardingButton tourType="valuation" className="ml-2" />
+            </div>
             <p className="mt-4 max-w-2xl text-xl text-neutral-dark mx-auto">
               Fill out the form below to receive an accurate valuation based on the Bulgarian used car market.
             </p>
@@ -614,7 +618,10 @@ export default function CarValuationForm() {
 
                       <div className="bg-neutral-light p-6 rounded-lg">
                         <div className="result-section">
-                          <h4 className="text-xl font-semibold text-neutral-dark">Your Car's Market Value</h4>
+                          <div className="flex items-center justify-center">
+                            <h4 className="text-xl font-semibold text-neutral-dark">Your Car's Market Value</h4>
+                            <OnboardingButton tourType="results" className="ml-2" />
+                          </div>
                           <div className="mt-4 flex justify-center market-value">
                             <div className="text-5xl font-bold text-primary">
                               {formatCurrency(inquiryData.valuationResult.marketValue)}

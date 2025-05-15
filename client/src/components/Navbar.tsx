@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LanguageContext } from "../context/LanguageContext";
 import { useAuth } from "@/hooks/use-auth";
+import OnboardingButton from "./OnboardingButton";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -89,6 +90,8 @@ export default function Navbar() {
               <span className="sr-only">Toggle language</span>
               <span className="ml-1 text-xs">{language.toUpperCase()}</span>
             </button>
+            {/* Help button */}
+            <OnboardingButton tourType="homepage" className="ml-2" />
             {/* Trial badge */}
             <span className="ml-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
               {t.trial}
