@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ValuationChart from "@/components/ValuationChart";
 import { Loader2, Download, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -22,6 +21,7 @@ export default function BMWTest() {
           throw new Error("Failed to fetch valuation data");
         }
         const data = await response.json();
+        console.log("Valuation data:", data);
         setValuationData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -84,7 +84,7 @@ export default function BMWTest() {
   }
 
   // For the active tab, get the correct valuation data
-  const currentValuation = valuationData[activeTab];
+  const currentValuation = valuationData[activeTab] || {};
 
   return (
     <>
@@ -128,16 +128,26 @@ export default function BMWTest() {
                         <CardContent>
                           <div className="space-y-2">
                             <div>
-                              <span className="font-medium">VIN:</span> {currentValuation.vehicleDetails.vin}
+                              <span className="font-medium">VIN:</span> {currentValuation.vehicleDetails?.vin || 'N/A'}
                             </div>
                             <div>
-                              <span className="font-medium">Mileage:</span> {currentValuation.vehicleDetails.mileage.toLocaleString()} km
+                              <span className="font-medium">Mileage:</span> {(currentValuation.vehicleDetails?.mileage || 0).toLocaleString()} km
                             </div>
                             <div>
-                              <span className="font-medium">Fuel Type:</span> {currentValuation.vehicleDetails.fuelType.charAt(0).toUpperCase() + currentValuation.vehicleDetails.fuelType.slice(1)}
+                              <span className="font-medium">Fuel Type:</span> {
+                                currentValuation.vehicleDetails?.fuelType 
+                                  ? currentValuation.vehicleDetails.fuelType.charAt(0).toUpperCase() + 
+                                    currentValuation.vehicleDetails.fuelType.slice(1)
+                                  : 'N/A'
+                              }
                             </div>
                             <div>
-                              <span className="font-medium">Transmission:</span> {currentValuation.vehicleDetails.transmission.charAt(0).toUpperCase() + currentValuation.vehicleDetails.transmission.slice(1)}
+                              <span className="font-medium">Transmission:</span> {
+                                currentValuation.vehicleDetails?.transmission
+                                  ? currentValuation.vehicleDetails.transmission.charAt(0).toUpperCase() + 
+                                    currentValuation.vehicleDetails.transmission.slice(1)
+                                  : 'N/A'
+                              }
                             </div>
                           </div>
                         </CardContent>
@@ -152,10 +162,10 @@ export default function BMWTest() {
                         <CardContent>
                           <div className="text-center">
                             <div className="text-4xl font-bold text-primary">
-                              {formatCurrency(currentValuation.marketValue)}
+                              {formatCurrency(currentValuation.marketValue || 0)}
                             </div>
                             <div className="mt-2 text-sm text-neutral">
-                              Valid until: {formatDate(currentValuation.validUntil)}
+                              Valid until: {currentValuation.validUntil ? formatDate(currentValuation.validUntil) : 'N/A'}
                             </div>
                           </div>
                           
@@ -185,51 +195,35 @@ export default function BMWTest() {
                       <CardContent>
                         <div className="text-center">
                           <div className="text-4xl font-bold text-primary">
-                            {formatCurrency(currentValuation.marketValue)}
+                            {formatCurrency(currentValuation.marketValue || 0)}
                           </div>
                           <div className="mt-2 text-sm text-neutral">
-                            Valid until: {formatDate(currentValuation.validUntil)}
+                            Valid until: {currentValuation.validUntil ? formatDate(currentValuation.validUntil) : 'N/A'}
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Market Insights</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-3">
-                          <div>
-                            <span className="font-medium">Market Trend:</span> {currentValuation.marketInsights.historicalTrendPercentage > 0 ? 'Rising' : 'Declining'} 
-                            ({currentValuation.marketInsights.historicalTrendPercentage > 0 ? '+' : ''}{currentValuation.marketInsights.historicalTrendPercentage}%)
+                    {currentValuation.marketInsights && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-lg">Market Insights</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-3">
+                            <div>
+                              <span className="font-medium">Historical Trend:</span> {currentValuation.marketInsights.historicalTrendPercentage}%
+                            </div>
+                            <div>
+                              <span className="font-medium">Best Time to Sell:</span> {currentValuation.marketInsights.bestTimeToSell}
+                            </div>
+                            <div>
+                              <span className="font-medium">Market Condition:</span> {currentValuation.marketInsights.marketCondition}
+                            </div>
                           </div>
-                          <div>
-                            <span className="font-medium">Best Time to Sell:</span> {currentValuation.marketInsights.bestTimeToSell}
-                          </div>
-                          <div>
-                            <span className="font-medium">Market Condition:</span> {currentValuation.marketInsights.marketCondition}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="md:col-span-2">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Historical & Predicted Values</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div style={{ height: "300px" }}>
-                          {currentValuation.historicalData && (
-                            <ValuationChart data={currentValuation.historicalData} />
-                          )}
-                        </div>
-                        <div className="mt-4 text-center">
-                          <p className="font-medium">Predicted value in 1 month: {formatCurrency(currentValuation.futurePrediction.nextMonth)}</p>
-                          <p className="text-sm">Change: {currentValuation.futurePrediction.trendPercentage > 0 ? '+' : ''}{currentValuation.futurePrediction.trendPercentage}%</p>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </CardContent>
+                      </Card>
+                    )}
 
                     <div className="md:col-span-2 flex justify-center space-x-4">
                       <Button variant="outline" onClick={downloadReport}>
@@ -254,91 +248,37 @@ export default function BMWTest() {
                       <CardContent>
                         <div className="text-center">
                           <div className="text-4xl font-bold text-primary">
-                            {formatCurrency(currentValuation.marketValue)}
+                            {formatCurrency(currentValuation.marketValue || 0)}
                           </div>
                           <div className="mt-2 text-sm text-neutral">
-                            Valid until: {formatDate(currentValuation.validUntil)}
+                            Valid until: {currentValuation.validUntil ? formatDate(currentValuation.validUntil) : 'N/A'}
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Market Demand</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-3">
-                          <div>
-                            <span className="font-medium">Demand Level:</span> {currentValuation.marketDemand.demandLevel}
-                          </div>
-                          <div>
-                            <span className="font-medium">Demand Score:</span> {currentValuation.marketDemand.demandScore}/10
-                          </div>
-                          <div>
-                            <span className="font-medium">Seasonal Trends:</span> {currentValuation.marketDemand.seasonalTrends}
-                          </div>
-                          <div>
-                            <span className="font-medium">Best Selling Period:</span> {currentValuation.marketDemand.bestSellingPeriod}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="md:col-span-2">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Historical & Predicted Values</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div style={{ height: "300px" }}>
-                          {currentValuation.historicalData && (
-                            <ValuationChart data={currentValuation.historicalData} />
-                          )}
-                        </div>
-                        <div className="mt-4 text-center">
-                          <p className="font-medium">3-Month Prediction: {formatCurrency(currentValuation.futurePrediction.threeMonths)}</p>
-                          <p className="text-sm">{currentValuation.futurePrediction.trendDescription}</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Market Insights</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-3">
-                          <div>
-                            <span className="font-medium">Market Trend:</span> {currentValuation.marketInsights.historicalTrendPercentage > 0 ? 'Rising' : 'Declining'} 
-                            ({currentValuation.marketInsights.historicalTrendPercentage > 0 ? '+' : ''}{currentValuation.marketInsights.historicalTrendPercentage}%)
-                          </div>
-                          <div>
-                            <span className="font-medium">Best Time to Sell:</span> {currentValuation.marketInsights.bestTimeToSell}
-                          </div>
-                          <div>
-                            <span className="font-medium">Market Condition:</span> {currentValuation.marketInsights.marketCondition}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Competitor Analysis</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-3">
-                          {currentValuation.competitorAnalysis.pricingComparison.map((competitor: any, idx: number) => (
-                            <div key={idx}>
-                              <span className="font-medium">{competitor.dealer}:</span> {formatCurrency(competitor.price)} <span className="text-sm">({competitor.comparison})</span>
+                    {currentValuation.marketDemand && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-lg">Market Demand</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-3">
+                            <div>
+                              <span className="font-medium">Demand Level:</span> {currentValuation.marketDemand.demandLevel}
                             </div>
-                          ))}
-                          <div className="mt-2">
-                            <span className="font-medium">Market Position:</span> {currentValuation.competitorAnalysis.marketPosition}
+                            <div>
+                              <span className="font-medium">Demand Score:</span> {currentValuation.marketDemand.demandScore}/10
+                            </div>
+                            {currentValuation.marketDemand.seasonalTrends && (
+                              <div>
+                                <span className="font-medium">Seasonal Trends:</span> {currentValuation.marketDemand.seasonalTrends}
+                              </div>
+                            )}
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </CardContent>
+                      </Card>
+                    )}
 
                     <div className="md:col-span-2 flex justify-center space-x-4">
                       <Button variant="outline" onClick={downloadReport}>
