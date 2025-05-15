@@ -9,6 +9,7 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
   email: text("email").notNull(),
   isAdmin: boolean("is_admin").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -32,11 +33,12 @@ export const carInquiries = pgTable("car_inquiries", {
   status: varchar("status", { length: 20 }).default("pending"),
   planType: varchar("plan_type", { length: 10 }).notNull(),
   valuationResult: jsonb("valuation_result"),
-  userId: integer("user_id"),
+  userId: integer("user_id").references(() => users.id),
   paymentId: varchar("payment_id", { length: 100 }),
   paymentCompleted: boolean("payment_completed").default(false),
   paymentAmount: real("payment_amount"),
   paymentMethod: varchar("payment_method", { length: 20 }),
+  trialPeriod: boolean("trial_period").default(false),
 });
 
 export const insertCarInquirySchema = createInsertSchema(carInquiries).omit({
@@ -53,6 +55,9 @@ export const adminSettings = pgTable("admin_settings", {
   id: serial("id").primaryKey(),
   notificationEmail: text("notification_email").notNull(),
   apiSettings: jsonb("api_settings"),
+  trialPeriodEnabled: boolean("trial_period_enabled").default(false),
+  trialPeriodCount: integer("trial_period_count").default(50),
+  trialPeriodUsed: integer("trial_period_used").default(0),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
