@@ -35,10 +35,18 @@ export default function Navbar() {
 
   const navLinks = [
     { name: t.common.home, path: "/" },
-    { name: t.common.howItWorks || "How It Works", path: "/#how-it-works" },
-    { name: t.common.pricing || "Pricing", path: "/#pricing" },
-    { name: t.common.contact, path: "/#footer" },
+    { name: t.common.howItWorks || "How It Works", path: "/" },
+    { name: t.common.pricing || "Pricing", path: "/" },
+    { name: t.common.contact, path: "/" },
   ];
+  
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <nav className="bg-white shadow-sm navbar">
@@ -69,16 +77,26 @@ export default function Navbar() {
           {/* Navigation links moved to the right */}
           <div className="hidden md:flex md:items-center">
             <div className="flex space-x-8">
-              {navLinks.map((link) => (
-                <Link key={link.name} href={link.path} className={`
-                  ${location === link.path
-                    ? "border-primary text-neutral-dark"
-                    : "border-transparent text-neutral hover:text-neutral-dark"
-                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
-                >
-                  {link.name}
-                </Link>
-              ))}
+              {navLinks.map((link, index) => {
+                // Define section IDs based on index
+                const sectionIds = ["", "how-it-works", "pricing", "footer"];
+                const sectionId = sectionIds[index];
+                
+                return (
+                  <a 
+                    key={link.name} 
+                    href={link.path} 
+                    className={`
+                      ${location === link.path && index === 0
+                        ? "border-primary text-neutral-dark"
+                        : "border-transparent text-neutral hover:text-neutral-dark"
+                      } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                    onClick={index > 0 ? (e) => handleNavClick(e, sectionId) : undefined}
+                  >
+                    {link.name}
+                  </a>
+                );
+              })}
             </div>
             
             {/* User account menu */}
@@ -146,20 +164,31 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="pt-2 pb-3 space-y-1">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                href={link.path}
-                className={`${
-                  location === link.path
-                    ? "bg-neutral-light text-primary block pl-3 pr-4 py-2 border-l-4 border-primary text-base font-medium"
-                    : "border-transparent text-neutral-dark hover:bg-gray-50 hover:border-gray-300 hover:text-primary block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
-            ))}
+            {navLinks.map((link, index) => {
+              // Define section IDs based on index
+              const sectionIds = ["", "how-it-works", "pricing", "footer"];
+              const sectionId = sectionIds[index];
+              
+              return (
+                <a 
+                  key={link.name} 
+                  href={link.path}
+                  className={`${
+                    location === link.path && index === 0
+                      ? "bg-neutral-light text-primary block pl-3 pr-4 py-2 border-l-4 border-primary text-base font-medium"
+                      : "border-transparent text-neutral-dark hover:bg-gray-50 hover:border-gray-300 hover:text-primary block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                  }`}
+                  onClick={(e) => {
+                    setIsMenuOpen(false);
+                    if (index > 0) {
+                      handleNavClick(e, sectionId);
+                    }
+                  }}
+                >
+                  {link.name}
+                </a>
+              );
+            })}
             <div className="pt-4 pb-3 border-t border-gray-200 space-y-2">
               {/* Language switcher for mobile */}
               <button 

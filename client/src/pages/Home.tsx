@@ -69,10 +69,10 @@ export default function Home() {
       
       <div className="homepage-content">
         <Hero />
-        <div className="how-it-works">
+        <div id="how-it-works" className="how-it-works">
           <HowItWorks />
         </div>
-        <div className="pricing-section">
+        <div id="pricing" className="pricing-section">
           <PricingCards />
         </div>
       </div>

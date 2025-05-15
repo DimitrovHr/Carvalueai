@@ -64,7 +64,10 @@ export default function Footer() {
             <ul className="space-y-3">
               <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.aboutUs}</Link></li>
               <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.careers}</Link></li>
-              <li><Link href="/#footer" className="text-gray-300 hover:text-white text-sm">{t.contact}</Link></li>
+              <li><a href="#footer" className="text-gray-300 hover:text-white text-sm" onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' });
+                }}>{t.contact}</a></li>
               <li><Link href="/" className="text-gray-300 hover:text-white text-sm">{t.press}</Link></li>
             </ul>
           </div>
