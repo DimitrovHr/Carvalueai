@@ -10,6 +10,7 @@ import CarValuationForm from "@/pages/CarValuationForm";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "./context/LanguageContext";
+import { OnboardingProvider } from "./context/OnboardingContext";
 import { useState } from "react";
 import AuthPage from "./pages/AuthPage";
 import { AuthProvider } from "./hooks/use-auth";
@@ -35,14 +36,16 @@ function App() {
       <LanguageProvider>
         <AuthProvider>
           <TooltipProvider>
-            <div className="flex flex-col min-h-screen">
-              <Navbar />
-              <main className="flex-grow">
-                <Router />
-              </main>
-              <Footer />
-            </div>
-            <Toaster />
+            <OnboardingProvider>
+              <div className="flex flex-col min-h-screen">
+                <Navbar />
+                <main className="flex-grow">
+                  <Router />
+                </main>
+                <Footer />
+              </div>
+              <Toaster />
+            </OnboardingProvider>
           </TooltipProvider>
         </AuthProvider>
       </LanguageProvider>
