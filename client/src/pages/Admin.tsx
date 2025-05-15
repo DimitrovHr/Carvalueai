@@ -169,6 +169,7 @@ export default function Admin() {
             <Tabs defaultValue="inquiries" value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="mb-6">
                 <TabsTrigger value="inquiries">Customer Inquiries</TabsTrigger>
+                <TabsTrigger value="analytics">Analytics Dashboard</TabsTrigger>
                 <TabsTrigger value="settings">Settings</TabsTrigger>
                 <TabsTrigger value="testing">Testing</TabsTrigger>
               </TabsList>
@@ -220,6 +221,302 @@ export default function Admin() {
                     No inquiries found. Customer inquiries will appear here.
                   </div>
                 )}
+              </TabsContent>
+              
+              {/* Analytics Dashboard Tab */}
+              <TabsContent value="analytics" className="analytics-dashboard">
+                {/* Summary Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-sm font-medium text-muted-foreground">Total Inquiries</p>
+                          <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="text-2xl font-bold"
+                          >
+                            {inquiriesData?.length || 0}
+                          </motion.div>
+                        </div>
+                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                          <BarChart3 className="h-5 w-5 text-primary" />
+                        </div>
+                      </div>
+                      {inquiriesData?.length > 0 && (
+                        <div className="flex items-center mt-2 text-xs">
+                          <ArrowUpRight className="h-3 w-3 text-green-500 mr-1" />
+                          <span className="text-green-500 font-medium">+14%</span>
+                          <span className="text-muted-foreground ml-1">since last month</span>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-sm font-medium text-muted-foreground">Revenue</p>
+                          <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                            className="text-2xl font-bold"
+                          >
+                            €{inquiriesData?.reduce((acc, inquiry) => {
+                              const planPrices = { regular: 15.99, premium: 29.99, business: 49.99 };
+                              return acc + (planPrices[inquiry.planType as keyof typeof planPrices] || 0);
+                            }, 0).toFixed(2) || '0.00'}
+                          </motion.div>
+                        </div>
+                        <div className="h-10 w-10 rounded-full bg-green-500/10 flex items-center justify-center">
+                          <CreditCard className="h-5 w-5 text-green-500" />
+                        </div>
+                      </div>
+                      <div className="flex items-center mt-2 text-xs">
+                        <ArrowUpRight className="h-3 w-3 text-green-500 mr-1" />
+                        <span className="text-green-500 font-medium">+21%</span>
+                        <span className="text-muted-foreground ml-1">since last month</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-sm font-medium text-muted-foreground">Avg. Valuation</p>
+                          <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            className="text-2xl font-bold"
+                          >
+                            €15,875
+                          </motion.div>
+                        </div>
+                        <div className="h-10 w-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                          <TrendingUp className="h-5 w-5 text-blue-500" />
+                        </div>
+                      </div>
+                      <div className="flex items-center mt-2 text-xs">
+                        <ArrowDownRight className="h-3 w-3 text-red-500 mr-1" />
+                        <span className="text-red-500 font-medium">-2.3%</span>
+                        <span className="text-muted-foreground ml-1">market trend</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-sm font-medium text-muted-foreground">Active Users</p>
+                          <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                            className="text-2xl font-bold"
+                          >
+                            28
+                          </motion.div>
+                        </div>
+                        <div className="h-10 w-10 rounded-full bg-purple-500/10 flex items-center justify-center">
+                          <Users className="h-5 w-5 text-purple-500" />
+                        </div>
+                      </div>
+                      <div className="flex items-center mt-2 text-xs">
+                        <ArrowUpRight className="h-3 w-3 text-green-500 mr-1" />
+                        <span className="text-green-500 font-medium">+5.2%</span>
+                        <span className="text-muted-foreground ml-1">since last week</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                {/* Market Trend Visualization */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                  <Card className="lg:col-span-2">
+                    <CardHeader>
+                      <CardTitle>Market Trend Analysis</CardTitle>
+                      <CardDescription>Historical and projected market trends for the Bulgarian used car market</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ValuationChart 
+                        data={[
+                          { month: 'Jan', value: 16800 },
+                          { month: 'Feb', value: 16400 },
+                          { month: 'Mar', value: 16200 },
+                          { month: 'Apr', value: 15900 },
+                          { month: 'May', value: 15600 },
+                          { month: 'Jun', value: 15400 },
+                        ]}
+                        forecast={[
+                          { month: 'Jul', value: 15250 },
+                          { month: 'Aug', value: 15100 },
+                          { month: 'Sep', value: 14950 },
+                        ]}
+                        marketTrend={-2.3}
+                        chartType="area"
+                      />
+                    </CardContent>
+                    <CardFooter className="text-sm text-muted-foreground">
+                      <RefreshCw className="h-3 w-3 mr-1" /> Updated 2 hours ago
+                    </CardFooter>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Inquiry Distribution</CardTitle>
+                      <CardDescription>Plan selection by customers</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-6">
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center">
+                              <div className="h-3 w-3 rounded-full bg-primary mr-2"></div>
+                              <span className="text-sm font-medium">Regular (€15.99)</span>
+                            </div>
+                            <span className="text-sm font-medium">
+                              {Math.round((inquiriesData?.filter(i => i.planType === 'regular').length || 0) / 
+                              (inquiriesData?.length || 1) * 100)}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: `${Math.round((inquiriesData?.filter(i => i.planType === 'regular').length || 0) / 
+                              (inquiriesData?.length || 1) * 100)}%` }}
+                              transition={{ duration: 1, delay: 0.5 }}
+                              className="bg-primary h-2 rounded-full"
+                            ></motion.div>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center">
+                              <div className="h-3 w-3 rounded-full bg-blue-500 mr-2"></div>
+                              <span className="text-sm font-medium">Premium (€29.99)</span>
+                            </div>
+                            <span className="text-sm font-medium">
+                              {Math.round((inquiriesData?.filter(i => i.planType === 'premium').length || 0) / 
+                              (inquiriesData?.length || 1) * 100)}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: `${Math.round((inquiriesData?.filter(i => i.planType === 'premium').length || 0) / 
+                              (inquiriesData?.length || 1) * 100)}%` }}
+                              transition={{ duration: 1, delay: 0.6 }}
+                              className="bg-blue-500 h-2 rounded-full"
+                            ></motion.div>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center">
+                              <div className="h-3 w-3 rounded-full bg-purple-500 mr-2"></div>
+                              <span className="text-sm font-medium">Business (€49.99)</span>
+                            </div>
+                            <span className="text-sm font-medium">
+                              {Math.round((inquiriesData?.filter(i => i.planType === 'business').length || 0) / 
+                              (inquiriesData?.length || 1) * 100)}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: `${Math.round((inquiriesData?.filter(i => i.planType === 'business').length || 0) / 
+                              (inquiriesData?.length || 1) * 100)}%` }}
+                              transition={{ duration: 1, delay: 0.7 }}
+                              className="bg-purple-500 h-2 rounded-full"
+                            ></motion.div>
+                          </div>
+                        </div>
+                        
+                        <div className="pt-4 mt-4 border-t">
+                          <h4 className="text-sm font-medium mb-2">Top Car Makes</h4>
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm">BMW</span>
+                              <Badge variant="outline">35%</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm">Mercedes</span>
+                              <Badge variant="outline">28%</Badge>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm">Audi</span>
+                              <Badge variant="outline">15%</Badge>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+                
+                {/* Recent Activity */}
+                <Card>
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <CardTitle>Recent Activity</CardTitle>
+                      <Badge variant="outline" className="flex items-center">
+                        <Clock className="h-3 w-3 mr-1" /> Real-time
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      {inquiriesData?.slice(0, 5).map((inquiry, index) => (
+                        <motion.div 
+                          key={inquiry.id || index}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.1 }}
+                          className="flex items-start"
+                        >
+                          <div className="h-9 w-9 rounded-full bg-muted flex items-center justify-center mr-3 mt-0.5">
+                            <Activity className="h-5 w-5 text-muted-foreground" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">
+                              New {inquiry.planType} valuation inquiry
+                              <Badge className="ml-2" variant={
+                                inquiry.status === 'completed' ? 'default' : 
+                                inquiry.status === 'pending' ? 'outline' : 'secondary'
+                              }>
+                                {inquiry.status}
+                              </Badge>
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {inquiry.createdAt ? new Date(inquiry.createdAt).toLocaleString() : 'Recently'}
+                            </p>
+                            <p className="text-xs mt-1">
+                              <span className="font-medium">{inquiry.make} {inquiry.model}</span> | 
+                              {inquiry.year && <span> {inquiry.year} |</span>} 
+                              {inquiry.fuelType && <span> {inquiry.fuelType.charAt(0).toUpperCase() + inquiry.fuelType.slice(1)} |</span>} 
+                              {inquiry.mileage && <span> {inquiry.mileage.toLocaleString()} km</span>}
+                            </p>
+                          </div>
+                        </motion.div>
+                      ))}
+                      
+                      {(!inquiriesData || inquiriesData.length === 0) && (
+                        <div className="text-center py-4 text-muted-foreground">
+                          No recent activity to display
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
               </TabsContent>
               
               {/* Settings Tab */}
