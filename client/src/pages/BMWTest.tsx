@@ -87,12 +87,52 @@ export default function BMWTest() {
   // For the active tab, get the correct valuation data
   const currentValuation = valuationData[activeTab] || {};
 
+  // SEO metadata
+  const pageTitle = "BMW 530d Station Wagon Valuation - CarValueAI";
+  const pageDescription = "See a sample valuation report for a BMW 530d station wagon with comprehensive market analysis. Explore Regular, Premium, and Business plan options.";
+  
+  // Schema data
+  const bmwTestSchema = {
+    "@type": "Product",
+    name: "BMW 530d Station Wagon (2017)",
+    description: "Example valuation for a 2017 BMW 530d station wagon with 193,000 km",
+    offers: {
+      "@type": "AggregateOffer",
+      offerCount: "3",
+      lowPrice: "15.99",
+      highPrice: "49.99",
+      priceCurrency: "EUR",
+      offers: [
+        {
+          "@type": "Offer",
+          name: "Regular Valuation",
+          price: "15.99",
+          priceCurrency: "EUR"
+        },
+        {
+          "@type": "Offer",
+          name: "Premium Valuation",
+          price: "29.99",
+          priceCurrency: "EUR"
+        },
+        {
+          "@type": "Offer",
+          name: "Business Valuation",
+          price: "49.99",
+          priceCurrency: "EUR"
+        }
+      ]
+    }
+  };
+
   return (
     <>
-      <Helmet>
-        <title>BMW 530d Valuation Test | CarValueAI</title>
-        <meta name="description" content="Test valuation results for a BMW 530d station wagon from 2017 with 193,000 km." />
-      </Helmet>
+      <SEOMetadata
+        title={pageTitle}
+        description={pageDescription}
+        schemaData={bmwTestSchema}
+        article={true}
+      />
 
       <div className="bg-white py-12">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
