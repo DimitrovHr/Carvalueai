@@ -1,7 +1,10 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function Hero() {
+  const { t } = useTranslation();
+  
   return (
     <div className="relative bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -9,24 +12,23 @@ export default function Hero() {
           <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
             <div className="sm:text-center lg:text-left">
               <h1 className="text-4xl tracking-tight font-extrabold text-neutral-dark sm:text-5xl md:text-6xl">
-                <span className="block xl:inline">Discover your car's</span>{' '}
-                <span className="block text-primary xl:inline">true market value</span>
+                <span className="block xl:inline">{t.home.heroTitle}</span>
               </h1>
               <p className="mt-3 text-base text-neutral-dark sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                CarValueAI gives you accurate market valuations based on the Bulgarian used car market. Get started today with our advanced AI-powered car valuation tool.
+                {t.home.heroSubtitle}
               </p>
               <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div className="rounded-md shadow cta-button">
                   <Link href="/valuation">
                     <Button size="lg" className="w-full flex items-center justify-center px-8 py-3 md:py-4 md:text-lg md:px-10">
-                      Get Started
+                      {t.home.ctaButton}
                     </Button>
                   </Link>
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
                   <Link href="/#how-it-works">
                     <Button variant="outline" size="lg" className="w-full flex items-center justify-center px-8 py-3 md:py-4 md:text-lg md:px-10 text-primary bg-neutral-light hover:bg-blue-100">
-                      How It Works
+                      {t.common.howItWorks}
                     </Button>
                   </Link>
                 </div>
