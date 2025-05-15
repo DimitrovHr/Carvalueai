@@ -133,12 +133,12 @@ export default function PricingCards() {
             <CardContent className="p-0">
               <div className="px-6 py-8 bg-white sm:p-10 sm:pb-6 flex-grow">
                 <div className="flex justify-between">
-                  <h3 className="inline-flex px-4 py-1 rounded-full text-sm font-semibold tracking-wide uppercase bg-accent/20 text-accent">
+                  <h3 className="inline-flex px-4 py-1 rounded-full text-sm font-bold tracking-wide uppercase bg-accent/30 text-accent shadow-sm">
                     {t.pricing.businessName}
                   </h3>
-                  <Badge variant="default" className="bg-accent text-white">{t.pricing.newBadge}</Badge>
+                  <Badge variant="default" className="bg-accent text-white font-medium shadow-sm">{t.pricing.newBadge}</Badge>
                 </div>
-                <div className="mt-4 flex items-baseline text-6xl font-extrabold">
+                <div className="mt-4 flex items-baseline text-6xl font-extrabold text-neutral-dark">
                   {t.pricing.businessPrice}
                 </div>
                 <p className="mt-5 text-lg text-neutral-dark font-medium">
@@ -159,7 +159,7 @@ export default function PricingCards() {
                 <div className="mt-8">
                   <Link href="/valuation">
                     <Button 
-                      className="w-full bg-accent hover:bg-accent/90 text-white font-semibold" 
+                      className="w-full bg-accent hover:bg-accent/90 text-white font-bold shadow-sm border border-accent" 
                       data-plan="business"
                       data-price="49.99"
                     >
