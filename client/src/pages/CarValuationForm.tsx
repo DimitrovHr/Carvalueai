@@ -229,6 +229,7 @@ export default function CarValuationForm() {
                                   placeholder="e.g. 120000" 
                                   {...field}
                                   onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                  className="mileage-input"
                                 />
                               </FormControl>
                               <FormMessage />
@@ -348,7 +349,8 @@ export default function CarValuationForm() {
                       <div className="pt-5">
                         <div className="flex justify-end">
                           <Button 
-                            type="submit" 
+                            type="submit"
+                            className="submit-button"
                             disabled={createInquiryMutation.isPending}
                           >
                             {createInquiryMutation.isPending && (
@@ -597,7 +599,7 @@ export default function CarValuationForm() {
 
               {/* Step 4: Results */}
               {step === 3 && (
-                <div className="form-step text-center space-y-6">
+                <div className="form-step text-center space-y-6 valuation-result">
                   {isLoadingInquiry ? (
                     <div className="flex justify-center py-8">
                       <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -613,7 +615,7 @@ export default function CarValuationForm() {
                       <div className="bg-neutral-light p-6 rounded-lg">
                         <div className="result-section">
                           <h4 className="text-xl font-semibold text-neutral-dark">Your Car's Market Value</h4>
-                          <div className="mt-4 flex justify-center">
+                          <div className="mt-4 flex justify-center market-value">
                             <div className="text-5xl font-bold text-primary">
                               {formatCurrency(inquiryData.valuationResult.marketValue)}
                             </div>
