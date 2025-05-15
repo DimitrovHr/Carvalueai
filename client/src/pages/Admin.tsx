@@ -182,7 +182,7 @@ export default function Admin() {
                   <div className="flex justify-center py-8">
                     <Loader2 className="h-8 w-8 animate-spin text-primary" />
                   </div>
-                ) : inquiries && inquiries.length > 0 ? (
+                ) : inquiriesData && inquiriesData.length > 0 ? (
                   <div className="overflow-x-auto">
                     <Table>
                       <TableHeader>
@@ -195,7 +195,7 @@ export default function Admin() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {inquiries.map((inquiry: any) => (
+                        {inquiriesData.map((inquiry: any) => (
                           <TableRow key={inquiry.id}>
                             <TableCell>{formatDate(inquiry.createdAt)}</TableCell>
                             <TableCell>
@@ -691,7 +691,7 @@ export default function Admin() {
                         `[${new Date().toLocaleString()}] Payment gateway: OK`,
                         `[${new Date().toLocaleString()}] AI model loaded: car-valuation-v2`,
                         `[${new Date().toLocaleString()}] Market data sources: 3 active`,
-                        `[${new Date().toLocaleString()}] Recent valuations: ${inquiries?.length || 0} total`,
+                        `[${new Date().toLocaleString()}] Recent valuations: ${inquiriesData?.length || 0} total`,
                         `[${new Date().toLocaleString()}] System status: Ready`
                       ].map((line, index) => (
                         <div key={index}>{line}</div>
@@ -703,7 +703,7 @@ export default function Admin() {
               
               {/* Market Data Tab */}
               <TabsContent value="market-data">
-                <MarketDataManagement inquiries={inquiries} />
+                <MarketDataManagement inquiries={inquiriesData} />
               </TabsContent>
             </Tabs>
           </CardContent>
