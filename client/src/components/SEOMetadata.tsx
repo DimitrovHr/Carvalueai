@@ -23,8 +23,8 @@ export default function SEOMetadata({
   // Default site metadata
   const siteName = "CarValueAI";
   const siteUrl = "https://carvalueai.bg";
-  const defaultTitle = t.seo.defaultTitle;
-  const defaultDescription = t.seo.defaultDescription;
+  const defaultTitle = "CarValueAI - Professional Car Valuations for Bulgaria";
+  const defaultDescription = "Get accurate, AI-powered car valuations based on Bulgarian market data. Regular, Premium, and Business plans available.";
   const defaultImage = "/images/carvalueai-social.jpg";
   
   // Use provided values or defaults

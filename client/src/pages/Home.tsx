@@ -8,10 +8,13 @@ export default function Home() {
   const { t } = useTranslation();
   
   // Schema data for homepage
+  const pageTitle = "CarValueAI - Expert Car Valuations in Bulgaria";
+  const pageDescription = "Find the exact value of your car with our AI-powered valuation system. Based on real Bulgarian market data and latest trends.";
+  
   const homepageSchema = {
     "@type": "Service",
     name: "CarValueAI Car Valuation",
-    description: t.seo.homepageDescription,
+    description: pageDescription,
     provider: {
       "@type": "Organization",
       name: "CarValueAI",
@@ -59,8 +62,8 @@ export default function Home() {
   return (
     <>
       <SEOMetadata 
-        title={t.seo.homepageTitle}
-        description={t.seo.homepageDescription}
+        title={pageTitle}
+        description={pageDescription}
         schemaData={homepageSchema}
       />
       

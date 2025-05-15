@@ -48,7 +48,7 @@ export default function Admin() {
   const { toast } = useToast();
 
   // Fetch inquiries
-  const { data: inquiries, isLoading: isLoadingInquiries } = useQuery({
+  const { data: inquiriesData, isLoading: isLoadingInquiries } = useQuery({
     queryKey: ['/api/inquiries'],
     refetchInterval: 30000, // Refetch every 30 seconds
   });
