@@ -531,7 +531,7 @@ export const translations = {
     }
   },
   
-  // BMW Test Page
+  // BMW Test page
   bmwTest: {
     en: {
       pageTitle: "BMW 530d Test Valuation",

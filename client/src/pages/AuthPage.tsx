@@ -132,11 +132,15 @@ export default function AuthPage() {
     registerMutation.mutate(registrationData);
   };
 
+  // Let's use the correct title and description from translations
+  const pageTitle = "Login or Register - CarValueAI";
+  const pageDescription = "Login to your CarValueAI account or register to access our car valuation services for the Bulgarian market.";
+
   // Schema data for auth page
   const authPageSchema = {
     "@type": "WebPage",
-    name: t.seo.authTitle,
-    description: t.seo.authDescription,
+    name: pageTitle,
+    description: pageDescription,
     provider: {
       "@type": "Organization",
       name: "CarValueAI",
@@ -147,8 +151,8 @@ export default function AuthPage() {
   return (
     <>
       <SEOMetadata
-        title={t.seo.authTitle}
-        description={t.seo.authDescription}
+        title={pageTitle}
+        description={pageDescription}
         schemaData={authPageSchema}
       />
       <div className="flex min-h-screen">
