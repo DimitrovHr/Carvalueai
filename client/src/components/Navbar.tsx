@@ -12,12 +12,14 @@ import {
 import { LanguageContext } from "../context/LanguageContext";
 import { useAuth } from "@/hooks/use-auth";
 import OnboardingButton from "./OnboardingButton";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
   const { language, setLanguage } = useContext(LanguageContext);
   const { user, logoutMutation } = useAuth();
+  const { t } = useTranslation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -31,44 +33,11 @@ export default function Navbar() {
     logoutMutation.mutate();
   };
 
-  const translations = {
-    en: {
-      home: "Home",
-      howItWorks: "How It Works",
-      pricing: "Pricing",
-      contact: "Contact",
-      login: "Login",
-      adminLogin: "Admin Login",
-      trial: "60-Day Trial",
-      logout: "Logout",
-      dashboard: "Dashboard",
-      admin: "Admin Panel",
-      account: "My Account",
-      welcome: "Welcome",
-    },
-    bg: {
-      home: "Начало",
-      howItWorks: "Как работи",
-      pricing: "Цени",
-      contact: "Контакт",
-      login: "Вход",
-      adminLogin: "Вход за администратор",
-      trial: "60-дневен пробен период",
-      logout: "Изход",
-      dashboard: "Табло",
-      admin: "Админ Панел",
-      account: "Моят Акаунт",
-      welcome: "Добре дошли",
-    }
-  };
-
-  const t = translations[language];
-
   const navLinks = [
-    { name: t.home, path: "/" },
-    { name: t.howItWorks, path: "/#how-it-works" },
-    { name: t.pricing, path: "/#pricing" },
-    { name: t.contact, path: "/#footer" },
+    { name: t.common.home, path: "/" },
+    { name: t.common.howItWorks || "How It Works", path: "/#how-it-works" },
+    { name: t.common.pricing || "Pricing", path: "/#pricing" },
+    { name: t.common.contact, path: "/#footer" },
   ];
 
   return (
@@ -94,7 +63,7 @@ export default function Navbar() {
             <OnboardingButton tourType="homepage" className="ml-2" />
             {/* Trial badge */}
             <span className="ml-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-              {t.trial}
+              {t.common.trial}
             </span>
           </div>
           
@@ -119,38 +88,38 @@ export default function Navbar() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="flex items-center">
                     <User className="h-4 w-4 mr-2" />
-                    {user ? user.username : t.login}
+                    {user ? user.username : t.common.login}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   {user ? (
                     <>
                       <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
-                        {t.welcome}, {user.username}
+                        {t.common.welcome}, {user.username}
                       </div>
                       <DropdownMenuSeparator />
                       {user.isAdmin && (
                         <DropdownMenuItem asChild>
                           <Link href="/admin" className="w-full">
-                            {t.admin}
+                            {t.common.adminPanel}
                           </Link>
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem asChild>
                         <Link href="/valuation" className="w-full">
-                          {t.dashboard}
+                          {t.common.dashboard}
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleLogout} className="text-red-500">
                         <LogOut className="h-4 w-4 mr-2" />
-                        {t.logout}
+                        {t.common.logout}
                       </DropdownMenuItem>
                     </>
                   ) : (
                     <DropdownMenuItem asChild>
                       <Link href="/auth" className="w-full">
-                        {t.login}
+                        {t.common.login}
                       </Link>
                     </DropdownMenuItem>
                   )}
@@ -201,7 +170,7 @@ export default function Navbar() {
                       className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-neutral-dark"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      {t.admin}
+                      {t.common.adminPanel}
                     </Link>
                   )}
                   <Link 
@@ -209,7 +178,7 @@ export default function Navbar() {
                     className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-neutral-dark"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    {t.dashboard}
+                    {t.common.dashboard}
                   </Link>
                   <button 
                     onClick={() => {
@@ -219,7 +188,7 @@ export default function Navbar() {
                     className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-red-500 w-full text-left"
                   >
                     <LogOut className="h-4 w-4 mr-2" />
-                    {t.logout}
+                    {t.common.logout}
                   </button>
                 </>
               ) : (
@@ -228,7 +197,7 @@ export default function Navbar() {
                   className="flex items-center pl-3 pr-4 py-2 text-base font-medium text-neutral-dark"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {t.login}
+                  {t.common.login}
                 </Link>
               )}
             </div>
