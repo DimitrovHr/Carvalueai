@@ -52,7 +52,7 @@ export default function Footer() {
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
-            <h3 className="text-xl font-bold mb-4 text-black">CarValueAI</h3>
+            <h3 className="text-xl font-bold mb-4 text-black">RactAI</h3>
             <p className="text-black text-base">
               {t.tagline}
             </p>
