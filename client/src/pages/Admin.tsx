@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Helmet } from "react-helmet";
 import { queryClient, apiRequest } from "@/lib/queryClient";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { 
@@ -21,8 +21,26 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { adminSettingsFormSchema, carDetailsSchema } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { 
+  Loader2,
+  TrendingUp,
+  TrendingDown,
+  Users,
+  CreditCard,
+  BarChart3,
+  PieChart,
+  ArrowUpRight,
+  ArrowDownRight,
+  RefreshCw,
+  Clock,
+  Calendar,
+  Activity 
+} from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import ValuationChart from "@/components/ValuationChart";
+import { Badge } from "@/components/ui/badge";
+import { FUEL_TYPES, TRANSMISSION_TYPES, INQUIRY_STATUS } from "@/lib/constants";
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("inquiries");

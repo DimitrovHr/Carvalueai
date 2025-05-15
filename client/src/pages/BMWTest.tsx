@@ -226,6 +226,32 @@ export default function BMWTest() {
                       </Card>
                     )}
 
+                    {/* Market Trend Chart */}
+                    <Card className="md:col-span-2">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-lg">Market Trend Analysis</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ValuationChart 
+                          data={[
+                            { month: 'Jan', value: 17200 },
+                            { month: 'Feb', value: 16800 },
+                            { month: 'Mar', value: 16500 },
+                            { month: 'Apr', value: 16300 },
+                            { month: 'May', value: 16100 },
+                            { month: 'Jun', value: 15900 },
+                          ]}
+                          forecast={[
+                            { month: 'Jul', value: 15700 },
+                            { month: 'Aug', value: 15500 },
+                            { month: 'Sep', value: 15350 },
+                          ]}
+                          marketTrend={-2.5}
+                          chartType="line"
+                        />
+                      </CardContent>
+                    </Card>
+
                     <div className="md:col-span-2 flex justify-center space-x-4">
                       <Button variant="outline" onClick={downloadReport}>
                         <Download className="mr-2 h-4 w-4" />
@@ -280,6 +306,48 @@ export default function BMWTest() {
                         </CardContent>
                       </Card>
                     )}
+
+                    {/* Market Comparison Chart */}
+                    <Card className="md:col-span-2">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-lg">Comprehensive Market Analysis</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ValuationChart 
+                          data={[
+                            { month: 'Jan', value: 17200 },
+                            { month: 'Feb', value: 16800 },
+                            { month: 'Mar', value: 16500 },
+                            { month: 'Apr', value: 16300 },
+                            { month: 'May', value: 16100 },
+                            { month: 'Jun', value: 15900 },
+                          ]}
+                          forecast={[
+                            { month: 'Jul', value: 15700 },
+                            { month: 'Aug', value: 15500 },
+                            { month: 'Sep', value: 15350 },
+                          ]}
+                          marketTrend={-2.5}
+                          compareData={[
+                            { month: 'Jan', value: 17200, comparableValue: 18000, marketAverage: 17800 },
+                            { month: 'Feb', value: 16800, comparableValue: 17600, marketAverage: 17500 },
+                            { month: 'Mar', value: 16500, comparableValue: 17300, marketAverage: 17200 },
+                            { month: 'Apr', value: 16300, comparableValue: 17000, marketAverage: 16900 },
+                            { month: 'May', value: 16100, comparableValue: 16700, marketAverage: 16600 },
+                            { month: 'Jun', value: 15900, comparableValue: 16500, marketAverage: 16300 },
+                          ]}
+                          chartType="comparison"
+                        />
+                        <div className="mt-4 text-sm text-neutral-dark">
+                          <p className="font-medium mb-1">Analysis Insights:</p>
+                          <ul className="list-disc pl-5 space-y-1">
+                            <li>Your BMW 530d is depreciating at a slightly faster rate (-2.5%) than comparable vehicles (-1.8%)</li>
+                            <li>Market liquidity is moderate with average days-to-sell of 32 days for this model</li>
+                            <li>There's a higher demand for this model from September to November</li>
+                          </ul>
+                        </div>
+                      </CardContent>
+                    </Card>
 
                     <div className="md:col-span-2 flex justify-center space-x-4">
                       <Button variant="outline" onClick={downloadReport}>
