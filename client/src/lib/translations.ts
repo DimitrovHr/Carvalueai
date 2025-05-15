@@ -1,5 +1,41 @@
 // Translation object for all application text
 export const translations = {
+  // SEO
+  seo: {
+    en: {
+      defaultTitle: "CarValueAI - Professional Car Valuations for Bulgaria",
+      defaultDescription: "Get accurate, AI-powered car valuations based on Bulgarian market data. Regular, Premium, and Business plans available.",
+      homepageTitle: "CarValueAI - Expert Car Valuations in Bulgaria",
+      homepageDescription: "Find the exact value of your car with our AI-powered valuation system. Based on real Bulgarian market data and latest trends.",
+      valuationTitle: "Get Your Car Valued - CarValueAI",
+      valuationDescription: "Enter your vehicle details to receive a precise, market-based valuation. Three different pricing plans available.",
+      resultsTitle: "Your Car Valuation Results - CarValueAI",
+      resultsDescription: "View your detailed car valuation report with market comparisons and trend analysis.",
+      authTitle: "Login or Register - CarValueAI",
+      authDescription: "Create an account or log in to access your car valuations and reports.",
+      adminTitle: "Admin Dashboard - CarValueAI",
+      adminDescription: "Manage valuations, view analytics, and update market data.",
+      bmwTitle: "BMW 530d Station Wagon Valuation - CarValueAI",
+      bmwDescription: "See a sample valuation report for a BMW 530d station wagon with comprehensive market analysis."
+    },
+    bg: {
+      defaultTitle: "CarValueAI - Професионални оценки на автомобили за България",
+      defaultDescription: "Получете точни, AI-powered оценки на автомобили, базирани на данни от българския пазар. Налични са Обикновен, Премиум и Бизнес планове.",
+      homepageTitle: "CarValueAI - Експертни оценки на автомобили в България",
+      homepageDescription: "Намерете точната стойност на вашия автомобил с нашата AI система за оценка. Базирана на реални данни от българския пазар и последните тенденции.",
+      valuationTitle: "Оценете своя автомобил - CarValueAI",
+      valuationDescription: "Въведете данните за вашия автомобил, за да получите прецизна оценка, базирана на пазара. Налични са три различни ценови плана.",
+      resultsTitle: "Резултати от оценката на вашия автомобил - CarValueAI",
+      resultsDescription: "Вижте подробния отчет за оценка на вашия автомобил със сравнения с пазара и анализ на тенденциите.",
+      authTitle: "Вход или Регистрация - CarValueAI",
+      authDescription: "Създайте акаунт или влезте, за да получите достъп до вашите оценки и отчети за автомобили.",
+      adminTitle: "Административно табло - CarValueAI",
+      adminDescription: "Управлявайте оценки, преглеждайте анализи и актуализирайте пазарни данни.",
+      bmwTitle: "Оценка на BMW 530d комби - CarValueAI",
+      bmwDescription: "Вижте примерен отчет за оценка на BMW 530d комби с изчерпателен пазарен анализ."
+    }
+  },
+  
   // Pricing
   pricing: {
     en: {
