@@ -7,6 +7,11 @@ import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 import nodemailer from "nodemailer";
 import { setupAuth } from "./auth";
+import { 
+  scheduleValuationRefinements, 
+  manuallyRefineAllValuations, 
+  refineValuation 
+} from "./marketDataService";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication routes
@@ -262,6 +267,116 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/paypal/order/:orderID/capture", async (req, res) => {
     await capturePaypalOrder(req, res);
   });
+
+  // Market data and valuation refinement endpoints
+  app.post("/api/admin/market-data/refine-all", async (req, res) => {
+    try {
+      if (!req.isAuthenticated() || !req.user.isAdmin) {
+        return res.status(403).json({ message: "Unauthorized. Admin access required." });
+      }
+      
+      const result = await manuallyRefineAllValuations();
+      return res.json({
+        message: `Refinement process completed. Processed ${result.total} valuations: ${result.refined} refined, ${result.failed} failed.`,
+        result
+      });
+    } catch (error) {
+      console.error("Error refining valuations:", error);
+      return res.status(500).json({ message: "Failed to refine valuations" });
+    }
+  });
+
+  app.post("/api/admin/market-data/refine/:id", async (req, res) => {
+    try {
+      if (!req.isAuthenticated() || !req.user.isAdmin) {
+        return res.status(403).json({ message: "Unauthorized. Admin access required." });
+      }
+      
+      const inquiryId = parseInt(req.params.id);
+      const result = await refineValuation(inquiryId);
+      
+      if (result) {
+        const updatedInquiry = await storage.getInquiry(inquiryId);
+        return res.json({
+          message: "Valuation successfully refined",
+          inquiry: updatedInquiry
+        });
+      } else {
+        return res.status(400).json({ message: "Unable to refine valuation" });
+      }
+    } catch (error) {
+      console.error("Error refining valuation:", error);
+      return res.status(500).json({ message: "Failed to refine valuation" });
+    }
+  });
+
+  app.get("/api/admin/market-data/status", async (req, res) => {
+    try {
+      if (!req.isAuthenticated() || !req.user.isAdmin) {
+        return res.status(403).json({ message: "Unauthorized. Admin access required." });
+      }
+      
+      // Get all inquiries and analyze their refinement status
+      const allInquiries = await storage.getAllInquiries();
+      const completedInquiries = allInquiries.filter(inquiry => 
+        inquiry.status === 'completed' && inquiry.valuationResult
+      );
+      
+      // Find recently refined valuations (within the last 7 days)
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      
+      const recentlyRefined = completedInquiries.filter(inquiry => {
+        const refinementHistory = (inquiry.valuationResult as any)?.refinementHistory || [];
+        return refinementHistory.length > 0 && 
+               new Date((refinementHistory[refinementHistory.length - 1] as any).date) >= sevenDaysAgo;
+      });
+      
+      // Find valuations that need refinement
+      const needsRefinement = completedInquiries.filter(inquiry => {
+        const lastUpdated = (inquiry.valuationResult as any)?.marketInsights?.lastUpdated;
+        if (!lastUpdated) return true; // Never updated
+        return new Date(lastUpdated) < sevenDaysAgo;
+      });
+      
+      return res.json({
+        totalInquiries: allInquiries.length,
+        completedInquiries: completedInquiries.length,
+        recentlyRefined: recentlyRefined.length,
+        needsRefinement: needsRefinement.length,
+        lastScheduledRefinement: new Date().toISOString() // In a real app, this would be stored in the database
+      });
+    } catch (error) {
+      console.error("Error getting market data status:", error);
+      return res.status(500).json({ message: "Failed to get market data status" });
+    }
+  });
+
+  // Set up scheduled refinement process (runs once a day at midnight)
+  // In a production environment, this would be handled by a cron job or similar
+  const scheduleRefinement = () => {
+    const now = new Date();
+    const midnight = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1, // tomorrow
+      0, 0, 0 // midnight
+    );
+    
+    const timeUntilMidnight = midnight.getTime() - now.getTime();
+    
+    setTimeout(async () => {
+      console.log("Running scheduled valuation refinement...");
+      await scheduleValuationRefinements();
+      // Schedule next run
+      scheduleRefinement();
+    }, timeUntilMidnight);
+    
+    console.log(`Scheduled next valuation refinement in ${Math.round(timeUntilMidnight / (1000 * 60 * 60))} hours`);
+  };
+  
+  // Start the refinement scheduler
+  scheduleRefinement();
 
   const httpServer = createServer(app);
   return httpServer;

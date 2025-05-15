@@ -172,6 +172,7 @@ export default function Admin() {
                 <TabsTrigger value="analytics">Analytics Dashboard</TabsTrigger>
                 <TabsTrigger value="settings">Settings</TabsTrigger>
                 <TabsTrigger value="testing">Testing</TabsTrigger>
+                <TabsTrigger value="market-data">Market Data</TabsTrigger>
               </TabsList>
               
               {/* Inquiries Tab */}
