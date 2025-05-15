@@ -16,7 +16,7 @@ export default function Hero() {
                 CarValueAI gives you accurate market valuations based on the Bulgarian used car market. Get started today with our advanced AI-powered car valuation tool.
               </p>
               <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                <div className="rounded-md shadow">
+                <div className="rounded-md shadow cta-button">
                   <Link href="/valuation">
                     <Button size="lg" className="w-full flex items-center justify-center px-8 py-3 md:py-4 md:text-lg md:px-10">
                       Get Started

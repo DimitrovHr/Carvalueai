@@ -20,9 +20,15 @@ export default function Home() {
         <meta property="og:type" content="website" />
       </Helmet>
       
-      <Hero />
-      <HowItWorks />
-      <PricingCards />
+      <div className="homepage-content">
+        <Hero />
+        <div className="how-it-works">
+          <HowItWorks />
+        </div>
+        <div className="pricing-section">
+          <PricingCards />
+        </div>
+      </div>
     </>
   );
 }

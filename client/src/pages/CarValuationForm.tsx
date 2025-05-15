@@ -196,7 +196,7 @@ export default function CarValuationForm() {
             <CardContent className="px-4 py-5 sm:p-6">
               {/* Step 1: Car Details */}
               {step === 0 && (
-                <div className="form-step">
+                <div className="form-step car-details-section">
                   <Form {...carDetailsForm}>
                     <form onSubmit={carDetailsForm.handleSubmit(onSubmitCarDetails)} className="space-y-6">
                       <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
@@ -207,7 +207,7 @@ export default function CarValuationForm() {
                             <FormItem className="sm:col-span-3">
                               <FormLabel>VIN Number</FormLabel>
                               <FormControl>
-                                <Input placeholder="e.g. WVWZZZ1JZXW000001" {...field} />
+                                <Input placeholder="e.g. WVWZZZ1JZXW000001" {...field} className="vin-input" />
                               </FormControl>
                               <FormDescription>
                                 Vehicle Identification Number (17 characters)
