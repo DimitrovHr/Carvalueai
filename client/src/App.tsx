@@ -14,12 +14,14 @@ import { useState } from "react";
 import AuthPage from "./pages/AuthPage";
 import { AuthProvider } from "./hooks/use-auth";
 import { ProtectedRoute } from "./lib/protected-route";
+import BMWTest from "@/pages/BMWTest";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/bmw-test" component={BMWTest} />
       <ProtectedRoute path="/valuation" component={CarValuationForm} />
       <ProtectedRoute path="/admin" component={Admin} adminOnly={true} />
       <Route component={NotFound} />

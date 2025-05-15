@@ -215,6 +215,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "Failed to generate test valuation" });
     }
   });
+  
+  // Special test endpoint for the BMW 530d example
+  app.get("/api/bmw-test-valuation", async (req, res) => {
+    try {
+      // BMW 530d station wagon 2017, automatic, 193000km
+      const bmwTestData = {
+        vin: "WBAJD52010G000001", // Example VIN
+        mileage: 193000,
+        fuelType: "diesel",
+        transmission: "automatic",
+        visibleDamages: "Minor scratches on rear bumper",
+        mechanicalDamages: "None",
+        additionalInfo: "Station wagon body style, 2017 model year",
+        id: 0,
+        createdAt: new Date(),
+        planType: "regular",
+        status: "test"
+      };
+      
+      // Generate valuations for all plan types
+      const regularResult = generateRegularValuationResult(bmwTestData);
+      const premiumResult = generatePremiumValuationResult(bmwTestData);
+      const businessResult = generateBusinessValuationResult(bmwTestData);
+      
+      return res.json({
+        regular: regularResult,
+        premium: premiumResult,
+        business: businessResult
+      });
+    } catch (error) {
+      console.error("Error generating BMW test valuation:", error);
+      return res.status(500).json({ message: "Failed to generate BMW test valuation" });
+    }
+  });
 
   // PayPal integration routes
   app.get("/paypal/setup", async (req, res) => {
