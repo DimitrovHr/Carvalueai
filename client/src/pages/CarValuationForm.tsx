@@ -649,7 +649,7 @@ export default function CarValuationForm() {
                             <div className="mt-4">
                               <ValuationChart data={inquiryData.valuationResult.historicalData} />
                               
-                              <div className="mt-4 bg-white p-4 rounded-md shadow-sm">
+                              <div className="mt-4 bg-white p-4 rounded-md shadow-sm validity-period">
                                 <h5 className="font-medium text-neutral-dark">Market Insights</h5>
                                 <p className="mt-2 text-sm text-neutral-dark">
                                   Based on our analysis, your vehicle value has 
@@ -676,7 +676,7 @@ export default function CarValuationForm() {
                       </div>
 
                       <div className="pt-5">
-                        <div className="flex justify-center space-x-4">
+                        <div className="flex justify-center space-x-4 report-actions">
                           <Button 
                             onClick={downloadReport}
                             className="inline-flex items-center"
