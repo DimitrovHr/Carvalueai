@@ -9,6 +9,9 @@ import nodemailer from "nodemailer";
 import { setupAuth } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Set up authentication routes
+  setupAuth(app);
+  
   // API routes
   app.get("/api/inquiries", async (req, res) => {
     try {

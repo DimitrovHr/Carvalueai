@@ -1,19 +1,22 @@
 import { useState, useContext } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, Globe } from "lucide-react";
+import { Menu, X, User, Globe, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { LanguageContext } from "../context/LanguageContext";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
   const { language, setLanguage } = useContext(LanguageContext);
+  const { user, logoutMutation } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -21,6 +24,10 @@ export default function Navbar() {
 
   const toggleLanguage = () => {
     setLanguage(language === "en" ? "bg" : "en");
+  };
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
   };
 
   const translations = {
@@ -32,6 +39,11 @@ export default function Navbar() {
       login: "Login",
       adminLogin: "Admin Login",
       trial: "60-Day Trial",
+      logout: "Logout",
+      dashboard: "Dashboard",
+      admin: "Admin Panel",
+      account: "My Account",
+      welcome: "Welcome",
     },
     bg: {
       home: "Начало",
@@ -41,6 +53,11 @@ export default function Navbar() {
       login: "Вход",
       adminLogin: "Вход за администратор",
       trial: "60-дневен пробен период",
+      logout: "Изход",
+      dashboard: "Табло",
+      admin: "Админ Панел",
+      account: "Моят Акаунт",
+      welcome: "Добре дошли",
     }
   };
 
