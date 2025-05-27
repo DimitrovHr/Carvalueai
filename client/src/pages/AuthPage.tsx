@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useAuth } from "@/hooks/use-auth";
+import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +24,7 @@ import { useTranslation } from "@/hooks/use-translation";
 
 // Form schemas
 const loginSchema = z.object({
-  username: z.string().min(1, "Username is required"),
+  email: z.string().email("Please enter a valid email"),
   password: z.string().min(1, "Password is required"),
 });
 
@@ -43,7 +43,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function AuthPage() {
   const [activeTab, setActiveTab] = useState<string>("login");
-  const { user, loginMutation, registerMutation } = useAuth();
+  const { user, loginMutation, registerMutation } = useSimpleAuth();
   const [_, navigate] = useLocation();
   const { language } = useContext(LanguageContext);
 
