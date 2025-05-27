@@ -188,6 +188,15 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
+  async deleteInquiry(id: number): Promise<void> {
+    try {
+      await db.delete(carInquiries).where(eq(carInquiries.id, id));
+    } catch (error) {
+      console.error("Error deleting inquiry:", error);
+      throw error;
+    }
+  }
+
   // Admin settings methods
   async getAdminSettings(): Promise<AdminSettings | undefined> {
     try {
