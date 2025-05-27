@@ -37,7 +37,8 @@ import {
   RefreshCw,
   Clock,
   Calendar,
-  Activity 
+  Activity,
+  CheckCircle 
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import ValuationChart from "@/components/ValuationChart";
@@ -263,6 +264,17 @@ export default function Admin() {
                                 >
                                   View
                                 </Button>
+                                {inquiry.paymentCompleted && inquiry.status !== 'completed' && (
+                                  <Button 
+                                    variant="default" 
+                                    size="sm"
+                                    onClick={() => handleApproveInquiry(inquiry.id)}
+                                    className="bg-green-600 hover:bg-green-700 text-white mr-1"
+                                  >
+                                    <CheckCircle className="w-3 h-3 mr-1" />
+                                    Approve
+                                  </Button>
+                                )}
                                 <Button 
                                   variant="destructive" 
                                   size="sm"
