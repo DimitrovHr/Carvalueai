@@ -95,14 +95,7 @@ export const PAYMENT_METHOD_DETAILS = {
     fees: "Free",
     supported: true
   },
-  crypto: {
-    name: "Cryptocurrency",
-    description: "Bitcoin, Ethereum, USDT",
-    icon: "bitcoin",
-    processingTime: "5-30 minutes",
-    fees: "Network fees apply",
-    supported: true
-  },
+
   apple_pay: {
     name: "Apple Pay",
     description: "Pay with Touch ID or Face ID",
