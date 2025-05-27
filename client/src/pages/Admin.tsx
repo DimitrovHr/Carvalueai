@@ -23,6 +23,7 @@ import { z } from "zod";
 import { adminSettingsFormSchema, carDetailsSchema } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { CAR_BRANDS_MODELS, CAR_TYPES, FUEL_TYPES, TRANSMISSION_TYPES, YEARS } from "@/lib/car-data";
 import { 
   Loader2,
   TrendingUp,
@@ -42,7 +43,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import ValuationChart from "@/components/ValuationChart";
 import MarketDataManagement from "@/components/MarketDataManagement";
 import { Badge } from "@/components/ui/badge";
-import { FUEL_TYPES, TRANSMISSION_TYPES, INQUIRY_STATUS } from "@/lib/constants";
+import { INQUIRY_STATUS } from "@/lib/constants";
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState("inquiries");
@@ -105,6 +106,10 @@ export default function Admin() {
     resolver: zodResolver(carDetailsSchema),
     defaultValues: {
       vin: "",
+      brand: "",
+      model: "",
+      year: new Date().getFullYear(),
+      carType: "sedan",
       mileage: undefined,
       fuelType: undefined,
       transmission: undefined,
@@ -644,6 +649,106 @@ export default function Admin() {
                               <FormControl>
                                 <Input placeholder="e.g. WVWZZZ1JZXW000001" {...field} />
                               </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={testForm.control}
+                          name="brand"
+                          render={({ field }) => (
+                            <FormItem className="sm:col-span-3">
+                              <FormLabel>Brand</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select car brand" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {Object.keys(CAR_BRANDS_MODELS).map((brand) => (
+                                    <SelectItem key={brand} value={brand}>
+                                      {brand}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={testForm.control}
+                          name="model"
+                          render={({ field }) => (
+                            <FormItem className="sm:col-span-3">
+                              <FormLabel>Model</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select car model" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {testForm.watch("brand") && CAR_BRANDS_MODELS[testForm.watch("brand") as keyof typeof CAR_BRANDS_MODELS]?.map((model) => (
+                                    <SelectItem key={model} value={model}>
+                                      {model}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={testForm.control}
+                          name="year"
+                          render={({ field }) => (
+                            <FormItem className="sm:col-span-3">
+                              <FormLabel>Year</FormLabel>
+                              <Select onValueChange={(value) => field.onChange(parseInt(value))} defaultValue={field.value?.toString()}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select year" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {YEARS.map((year) => (
+                                    <SelectItem key={year} value={year.toString()}>
+                                      {year}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={testForm.control}
+                          name="carType"
+                          render={({ field }) => (
+                            <FormItem className="sm:col-span-3">
+                              <FormLabel>Car Type</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select car type" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {CAR_TYPES.map((type) => (
+                                    <SelectItem key={type} value={type}>
+                                      {type}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
                               <FormMessage />
                             </FormItem>
                           )}
