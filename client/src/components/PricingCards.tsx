@@ -159,7 +159,8 @@ export default function PricingCards() {
                 <div className="mt-8">
                   <Link href="/valuation">
                     <Button 
-                      className="w-full bg-accent hover:bg-accent/90 text-white font-bold shadow-sm border border-accent" 
+                      variant="outline" 
+                      className="w-full bg-neutral-light hover:bg-blue-100 text-primary"
                       data-plan="business"
                       data-price="49.99"
                     >
