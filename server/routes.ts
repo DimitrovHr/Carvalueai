@@ -248,6 +248,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "Failed to generate test valuation" });
     }
   });
+
+  // Generate valuation email with language support
+  app.post("/api/inquiries/:id/generate-valuation", async (req, res) => {
+    try {
+      const inquiryId = parseInt(req.params.id);
+      const { planType = 'business', customerEmail, language = 'en' } = req.body;
+      
+      const inquiry = await storage.getInquiry(inquiryId);
+      if (!inquiry) {
+        return res.status(404).json({ message: "Inquiry not found" });
+      }
+
+      // Generate valuation result based on plan type
+      let valuationResult;
+      if (planType === "premium") {
+        valuationResult = generatePremiumValuationResult(inquiry);
+      } else if (planType === "business") {
+        valuationResult = generateBusinessValuationResult(inquiry);
+      } else {
+        valuationResult = generateRegularValuationResult(inquiry);
+      }
+
+      // Generate bilingual email template
+      const emailData = generateEmailTemplate({
+        inquiry,
+        valuationResult,
+        planType,
+        customerEmail,
+        language
+      });
+
+      // Note: Email sending would happen here if SendGrid credentials are configured
+      // For now, we'll return the generated email data
+      console.log(`Generated ${language} email for inquiry ${inquiryId}:`, emailData.subject);
+
+      return res.json({
+        message: `Valuation email generated successfully in ${language === 'bg' ? 'Bulgarian' : 'English'}`,
+        emailPreview: {
+          subject: emailData.subject,
+          language,
+          planType
+        }
+      });
+    } catch (error) {
+      console.error("Error generating valuation email:", error);
+      return res.status(500).json({ message: "Failed to generate valuation email" });
+    }
+  });
   
   // Special test endpoint for the BMW 530d example
   app.get("/api/bmw-test-valuation", async (req, res) => {
