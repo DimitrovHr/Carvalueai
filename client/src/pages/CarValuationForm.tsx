@@ -65,11 +65,22 @@ export default function CarValuationForm() {
     }
   });
 
-  // Create inquiry mutation
+  // Create inquiry mutation (frontend-only for Vercel deployment)
   const createInquiryMutation = useMutation({
     mutationFn: async (data: z.infer<typeof carDetailsSchema>) => {
-      const res = await apiRequest('POST', '/api/inquiries', data);
-      return res.json();
+      // Store inquiry in local storage for Vercel deployment
+      const existingInquiries = JSON.parse(localStorage.getItem('carInquiries') || '[]');
+      const newInquiry = {
+        id: Date.now(),
+        ...data,
+        status: 'pending',
+        planType: 'regular',
+        createdAt: new Date().toISOString(),
+        paymentCompleted: false
+      };
+      existingInquiries.push(newInquiry);
+      localStorage.setItem('carInquiries', JSON.stringify(existingInquiries));
+      return newInquiry;
     },
     onSuccess: (data) => {
       setInquiryId(data.id);
@@ -78,13 +89,13 @@ export default function CarValuationForm() {
     onError: (error) => {
       toast({
         title: "Error",
-        description: error.message || "There was a problem submitting your car details.",
+        description: "There was a problem submitting your car details.",
         variant: "destructive"
       });
     }
   });
 
-  // Complete payment mutation
+  // Complete payment mutation (frontend-only for Vercel deployment)
   const completePaymentMutation = useMutation({
     mutationFn: async (data: { 
       inquiryId: number; 
@@ -93,17 +104,23 @@ export default function CarValuationForm() {
       paymentId: string;
       amount: number;
     }) => {
-      const res = await apiRequest('POST', '/api/payment/complete', data);
-      return res.json();
+      // Update inquiry in local storage
+      const existingInquiries = JSON.parse(localStorage.getItem('carInquiries') || '[]');
+      const updatedInquiries = existingInquiries.map((inquiry: any) => 
+        inquiry.id === data.inquiryId 
+          ? { ...inquiry, planType: data.planType, paymentCompleted: true, paymentId: data.paymentId, paymentAmount: data.amount, paymentMethod: data.paymentMethod }
+          : inquiry
+      );
+      localStorage.setItem('carInquiries', JSON.stringify(updatedInquiries));
+      return { success: true };
     },
     onSuccess: (data) => {
       setStep(3); // Move to results
-      queryClient.invalidateQueries({ queryKey: [`/api/inquiries/${inquiryId}`] });
     },
     onError: (error) => {
       toast({
         title: "Payment Error",
-        description: error.message || "There was a problem processing your payment.",
+        description: "There was a problem processing your payment.",
         variant: "destructive"
       });
     }
