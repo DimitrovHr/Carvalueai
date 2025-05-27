@@ -718,8 +718,8 @@ export default function Admin() {
                                 </FormControl>
                                 <SelectContent>
                                   {YEARS.map((year) => (
-                                    <SelectItem key={year} value={year.toString()}>
-                                      {year}
+                                    <SelectItem key={year.value} value={year.value.toString()}>
+                                      {year.label}
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
@@ -743,8 +743,8 @@ export default function Admin() {
                                 </FormControl>
                                 <SelectContent>
                                   {CAR_TYPES.map((type) => (
-                                    <SelectItem key={type} value={type}>
-                                      {type}
+                                    <SelectItem key={type.value} value={type.value}>
+                                      {type.label}
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
