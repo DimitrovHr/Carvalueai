@@ -142,6 +142,35 @@ export default function Admin() {
     }
   });
 
+  // Approve inquiry mutation
+  const approveInquiryMutation = useMutation({
+    mutationFn: async (inquiryId: number) => {
+      const res = await apiRequest('PATCH', `/api/inquiries/${inquiryId}`, { status: 'completed' });
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Inquiry approved",
+        description: "The inquiry has been approved and marked as completed.",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/inquiries'] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error approving inquiry",
+        description: error.message || "An error occurred while approving the inquiry.",
+        variant: "destructive"
+      });
+    }
+  });
+
+  // Handle approve inquiry
+  const handleApproveInquiry = (inquiryId: number) => {
+    if (window.confirm('Are you sure you want to approve this inquiry? This will mark it as completed.')) {
+      approveInquiryMutation.mutate(inquiryId);
+    }
+  };
+
   // Handle delete inquiry
   const handleDeleteInquiry = (inquiryId: number) => {
     if (window.confirm('Are you sure you want to delete this inquiry? This action cannot be undone.')) {
