@@ -12,6 +12,7 @@ import {
   manuallyRefineAllValuations, 
   refineValuation 
 } from "./marketDataService";
+import { generateEmailTemplate } from "./emailTemplates";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication routes
