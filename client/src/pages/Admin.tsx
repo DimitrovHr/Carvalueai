@@ -5,6 +5,7 @@ import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
   Form,
   FormField,
@@ -142,6 +143,15 @@ export default function Admin() {
     }
   };
 
+  // Handle view inquiry
+  const [selectedInquiry, setSelectedInquiry] = useState<any>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
+  const handleViewInquiry = (inquiry: any) => {
+    setSelectedInquiry(inquiry);
+    setIsViewModalOpen(true);
+  };
+
   // Test valuation mutation
   const testValuationMutation = useMutation({
     mutationFn: async (data: z.infer<typeof carDetailsSchema>) => {
@@ -241,7 +251,13 @@ export default function Admin() {
                             </TableCell>
                             <TableCell>
                               <div className="flex space-x-2">
-                                <Button variant="link" size="sm">View</Button>
+                                <Button 
+                                  variant="link" 
+                                  size="sm"
+                                  onClick={() => handleViewInquiry(inquiry)}
+                                >
+                                  View
+                                </Button>
                                 <Button 
                                   variant="destructive" 
                                   size="sm"
@@ -747,6 +763,172 @@ export default function Admin() {
           </CardContent>
         </Card>
       </div>
+
+      {/* View Inquiry Modal */}
+      <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Inquiry Details</DialogTitle>
+          </DialogHeader>
+          
+          {selectedInquiry && (
+            <div className="space-y-6">
+              {/* Basic Information */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-semibold text-sm text-gray-600 mb-1">VIN</h4>
+                  <p className="text-sm">{selectedInquiry.vin || 'N/A'}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm text-gray-600 mb-1">Date Created</h4>
+                  <p className="text-sm">{new Date(selectedInquiry.createdAt).toLocaleDateString()}</p>
+                </div>
+              </div>
+
+              {/* Vehicle Details */}
+              <div>
+                <h3 className="font-semibold text-lg mb-3">Vehicle Information</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-semibold text-sm text-gray-600 mb-1">Brand</h4>
+                    <p className="text-sm">{selectedInquiry.brand || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-gray-600 mb-1">Model</h4>
+                    <p className="text-sm">{selectedInquiry.model || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-gray-600 mb-1">Year</h4>
+                    <p className="text-sm">{selectedInquiry.year || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-gray-600 mb-1">Car Type</h4>
+                    <p className="text-sm">{selectedInquiry.carType || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-gray-600 mb-1">Mileage</h4>
+                    <p className="text-sm">{selectedInquiry.mileage ? `${selectedInquiry.mileage} km` : 'N/A'}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-gray-600 mb-1">Fuel Type</h4>
+                    <p className="text-sm capitalize">{selectedInquiry.fuelType || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-gray-600 mb-1">Transmission</h4>
+                    <p className="text-sm capitalize">{selectedInquiry.transmission || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-gray-600 mb-1">Status</h4>
+                    <span className={`px-2 py-1 text-xs rounded-full ${
+                      selectedInquiry.status === 'completed' ? 'bg-green-100 text-green-800' : 
+                      selectedInquiry.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {selectedInquiry.status}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Damage Information */}
+              {(selectedInquiry.visibleDamages || selectedInquiry.mechanicalDamages) && (
+                <div>
+                  <h3 className="font-semibold text-lg mb-3">Damage Information</h3>
+                  <div className="space-y-3">
+                    {selectedInquiry.visibleDamages && (
+                      <div>
+                        <h4 className="font-semibold text-sm text-gray-600 mb-1">Visible Damages</h4>
+                        <p className="text-sm bg-gray-50 p-2 rounded">{selectedInquiry.visibleDamages}</p>
+                      </div>
+                    )}
+                    {selectedInquiry.mechanicalDamages && (
+                      <div>
+                        <h4 className="font-semibold text-sm text-gray-600 mb-1">Mechanical Damages</h4>
+                        <p className="text-sm bg-gray-50 p-2 rounded">{selectedInquiry.mechanicalDamages}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Additional Information */}
+              {selectedInquiry.additionalInfo && (
+                <div>
+                  <h3 className="font-semibold text-lg mb-3">Additional Information</h3>
+                  <p className="text-sm bg-gray-50 p-2 rounded">{selectedInquiry.additionalInfo}</p>
+                </div>
+              )}
+
+              {/* Payment Information */}
+              <div>
+                <h3 className="font-semibold text-lg mb-3">Payment & Plan</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-semibold text-sm text-gray-600 mb-1">Plan Type</h4>
+                    <p className="text-sm capitalize">{selectedInquiry.planType || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-sm text-gray-600 mb-1">Payment Status</h4>
+                    <span className={`px-2 py-1 text-xs rounded-full ${
+                      selectedInquiry.paymentCompleted ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      {selectedInquiry.paymentCompleted ? 'Completed' : 'Pending'}
+                    </span>
+                  </div>
+                  {selectedInquiry.paymentAmount && (
+                    <div>
+                      <h4 className="font-semibold text-sm text-gray-600 mb-1">Payment Amount</h4>
+                      <p className="text-sm">€{selectedInquiry.paymentAmount}</p>
+                    </div>
+                  )}
+                  {selectedInquiry.paymentMethod && (
+                    <div>
+                      <h4 className="font-semibold text-sm text-gray-600 mb-1">Payment Method</h4>
+                      <p className="text-sm capitalize">{selectedInquiry.paymentMethod}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Valuation Result */}
+              {selectedInquiry.valuationResult && (
+                <div>
+                  <h3 className="font-semibold text-lg mb-3">Valuation Result</h3>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="font-semibold text-sm text-gray-600 mb-1">Estimated Value</h4>
+                        <p className="text-xl font-bold text-blue-600">
+                          €{selectedInquiry.valuationResult.estimatedValue?.toLocaleString() || 'N/A'}
+                        </p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-sm text-gray-600 mb-1">Market Confidence</h4>
+                        <p className="text-sm">
+                          {selectedInquiry.valuationResult.confidence ? `${(selectedInquiry.valuationResult.confidence * 100).toFixed(1)}%` : 'N/A'}
+                        </p>
+                      </div>
+                    </div>
+                    {selectedInquiry.valuationResult.factors && (
+                      <div className="mt-3">
+                        <h4 className="font-semibold text-sm text-gray-600 mb-2">Valuation Factors</h4>
+                        <ul className="text-sm space-y-1">
+                          {selectedInquiry.valuationResult.factors.map((factor: string, index: number) => (
+                            <li key={index} className="flex items-start">
+                              <span className="w-2 h-2 bg-blue-400 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                              {factor}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
