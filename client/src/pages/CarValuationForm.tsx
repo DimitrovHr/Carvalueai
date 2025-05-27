@@ -32,14 +32,16 @@ import ProgressSteps from "@/components/ProgressSteps";
 import { useToast } from "@/hooks/use-toast";
 import { Check, Download, Mail, Loader2, CheckCircle } from "lucide-react";
 import PayPalButton from "@/components/PayPalButton";
+import PaymentMethodSelector from "@/components/PaymentMethodSelector";
 import ValuationChart from "@/components/ValuationChart";
 import { CAR_BRANDS_MODELS, CAR_TYPES, FUEL_TYPES, TRANSMISSION_TYPES, YEARS } from "@/lib/car-data";
+import { PRICING, PAYMENT_METHODS } from "@/lib/constants";
 
 export default function CarValuationForm() {
   const [step, setStep] = useState(0);
   const [inquiryId, setInquiryId] = useState<number | null>(null);
-  const [selectedPlan, setSelectedPlan] = useState<'regular' | 'premium'>('regular');
-  const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'revolut' | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<'regular' | 'premium' | 'business'>('regular');
+  const [paymentMethod, setPaymentMethod] = useState<string | null>(null);
   const [paymentId, setPaymentId] = useState<string | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string>("");
   const [location, navigate] = useLocation();

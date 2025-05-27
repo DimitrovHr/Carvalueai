@@ -54,7 +54,71 @@ export const PRICING = {
 // Payment methods
 export const PAYMENT_METHODS = {
   PAYPAL: "paypal",
-  REVOLUT: "revolut"
+  STRIPE: "stripe",
+  REVOLUT: "revolut",
+  BANK_TRANSFER: "bank_transfer",
+  CRYPTO: "crypto",
+  APPLE_PAY: "apple_pay",
+  GOOGLE_PAY: "google_pay"
+};
+
+export const PAYMENT_METHOD_DETAILS = {
+  paypal: {
+    name: "PayPal",
+    description: "Pay securely with your PayPal account",
+    icon: "paypal",
+    processingTime: "Instant",
+    fees: "Free",
+    supported: true
+  },
+  stripe: {
+    name: "Credit/Debit Card",
+    description: "Visa, Mastercard, American Express",
+    icon: "credit-card",
+    processingTime: "Instant",
+    fees: "Free",
+    supported: true
+  },
+  revolut: {
+    name: "Revolut",
+    description: "Pay with Revolut app",
+    icon: "smartphone",
+    processingTime: "Instant",
+    fees: "Free",
+    supported: true
+  },
+  bank_transfer: {
+    name: "Bank Transfer",
+    description: "Direct bank transfer (SEPA)",
+    icon: "building",
+    processingTime: "1-2 business days",
+    fees: "Free",
+    supported: true
+  },
+  crypto: {
+    name: "Cryptocurrency",
+    description: "Bitcoin, Ethereum, USDT",
+    icon: "bitcoin",
+    processingTime: "5-30 minutes",
+    fees: "Network fees apply",
+    supported: true
+  },
+  apple_pay: {
+    name: "Apple Pay",
+    description: "Pay with Touch ID or Face ID",
+    icon: "apple",
+    processingTime: "Instant",
+    fees: "Free",
+    supported: true
+  },
+  google_pay: {
+    name: "Google Pay",
+    description: "Pay with your Google account",
+    icon: "google",
+    processingTime: "Instant",
+    fees: "Free",
+    supported: true
+  }
 };
 
 // Form steps

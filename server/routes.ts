@@ -296,6 +296,99 @@ export async function registerRoutes(app: Express): Promise<Server> {
     await capturePaypalOrder(req, res);
   });
 
+  // Additional payment method routes
+  app.post("/api/payment/process", async (req, res) => {
+    try {
+      const { method, amount, currency, inquiryId, planType } = req.body;
+      
+      let paymentResult;
+      
+      switch (method) {
+        case 'stripe':
+          paymentResult = await processStripePayment(amount, currency);
+          break;
+        case 'revolut':
+          paymentResult = await processRevolutPayment(amount, currency);
+          break;
+        case 'bank_transfer':
+          paymentResult = await processBankTransfer(amount, currency);
+          break;
+        case 'crypto':
+          paymentResult = await processCryptoPayment(amount, currency);
+          break;
+        case 'apple_pay':
+          paymentResult = await processApplePayPayment(amount, currency);
+          break;
+        case 'google_pay':
+          paymentResult = await processGooglePayPayment(amount, currency);
+          break;
+        default:
+          return res.status(400).json({ message: "Unsupported payment method" });
+      }
+      
+      if (paymentResult.success) {
+        // Complete the inquiry with valuation
+        const inquiry = await storage.getInquiry(parseInt(inquiryId));
+        if (!inquiry) {
+          return res.status(404).json({ message: "Inquiry not found" });
+        }
+
+        let valuationResult;
+        if (planType === "premium") {
+          valuationResult = generatePremiumValuationResult(inquiry);
+        } else if (planType === "business") {
+          valuationResult = generateBusinessValuationResult(inquiry);
+        } else {
+          valuationResult = generateRegularValuationResult(inquiry);
+        }
+        
+        const updatedInquiry = await storage.updateInquiry(parseInt(inquiryId), {
+          planType,
+          paymentId: paymentResult.transactionId,
+          paymentMethod: method,
+          paymentAmount: amount,
+          paymentCompleted: true,
+          status: "completed",
+          valuationResult
+        });
+
+        return res.status(200).json({
+          success: true,
+          inquiry: updatedInquiry,
+          paymentDetails: paymentResult
+        });
+      } else {
+        return res.status(400).json({ 
+          success: false, 
+          message: paymentResult.error || "Payment failed" 
+        });
+      }
+    } catch (error) {
+      console.error("Error processing payment:", error);
+      return res.status(500).json({ message: "Failed to process payment" });
+    }
+  });
+
+  app.get("/api/payment/methods", async (req, res) => {
+    try {
+      // Return available payment methods based on configuration
+      const availableMethods = {
+        stripe: !!process.env.STRIPE_SECRET_KEY,
+        paypal: !!(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET),
+        revolut: !!process.env.REVOLUT_API_KEY,
+        bank_transfer: true, // Always available
+        crypto: !!process.env.CRYPTO_PROCESSOR_API_KEY,
+        apple_pay: !!process.env.STRIPE_SECRET_KEY, // Apple Pay through Stripe
+        google_pay: !!process.env.STRIPE_SECRET_KEY  // Google Pay through Stripe
+      };
+      
+      return res.json(availableMethods);
+    } catch (error) {
+      console.error("Error fetching payment methods:", error);
+      return res.status(500).json({ message: "Failed to fetch payment methods" });
+    }
+  });
+
   // Market data and valuation refinement endpoints
   app.post("/api/admin/market-data/refine-all", async (req, res) => {
     try {
@@ -557,6 +650,96 @@ function analyzeVINFeatures(vin: string) {
   
   // Limit to most valuable features to avoid over-valuation
   return features.slice(0, 3);
+}
+
+// Payment processor functions
+async function processStripePayment(amount: number, currency: string) {
+  // Simulate Stripe payment processing
+  // In production, this would integrate with actual Stripe API
+  return {
+    success: true,
+    transactionId: `stripe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    method: 'stripe',
+    amount,
+    currency,
+    processingTime: 'instant'
+  };
+}
+
+async function processRevolutPayment(amount: number, currency: string) {
+  // Simulate Revolut payment processing
+  // In production, this would integrate with Revolut Business API
+  return {
+    success: true,
+    transactionId: `revolut_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    method: 'revolut',
+    amount,
+    currency,
+    processingTime: 'instant'
+  };
+}
+
+async function processBankTransfer(amount: number, currency: string) {
+  // Simulate bank transfer processing
+  // In production, this would generate SEPA payment instructions
+  return {
+    success: true,
+    transactionId: `bank_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    method: 'bank_transfer',
+    amount,
+    currency,
+    processingTime: '1-2 business days',
+    bankDetails: {
+      accountName: 'CarValueAI Ltd',
+      iban: 'BG80BNBG96611020345678',
+      bic: 'BNBGBGSD',
+      reference: `INV-${Date.now()}`
+    }
+  };
+}
+
+async function processCryptoPayment(amount: number, currency: string) {
+  // Simulate cryptocurrency payment processing
+  // In production, this would integrate with crypto payment processor
+  return {
+    success: true,
+    transactionId: `crypto_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    method: 'crypto',
+    amount,
+    currency,
+    processingTime: '5-30 minutes',
+    cryptoDetails: {
+      btcAddress: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+      ethAddress: '0x742d35Cc6635C0532925a3b8D186c',
+      usdtAddress: 'TQn9Y2khEsLJW1ChVWFMSMeRDow5CXEF'
+    }
+  };
+}
+
+async function processApplePayPayment(amount: number, currency: string) {
+  // Simulate Apple Pay processing (typically through Stripe)
+  // In production, this would use Stripe's Apple Pay integration
+  return {
+    success: true,
+    transactionId: `apple_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    method: 'apple_pay',
+    amount,
+    currency,
+    processingTime: 'instant'
+  };
+}
+
+async function processGooglePayPayment(amount: number, currency: string) {
+  // Simulate Google Pay processing (typically through Stripe)
+  // In production, this would use Stripe's Google Pay integration
+  return {
+    success: true,
+    transactionId: `google_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    method: 'google_pay',
+    amount,
+    currency,
+    processingTime: 'instant'
+  };
 }
 
 function generatePremiumValuationResult(inquiry: any) {
