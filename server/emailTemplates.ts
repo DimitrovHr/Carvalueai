@@ -5,21 +5,116 @@ export interface EmailTemplateData {
   valuationResult: any;
   planType: 'regular' | 'premium' | 'business';
   customerEmail?: string;
+  language?: 'en' | 'bg';
 }
 
+// Email translations
+const emailTranslations = {
+  en: {
+    subject: 'Your {brand} {model} Valuation Report - CarValueAI {plan} Analysis',
+    greeting: 'Dear Valued Customer,',
+    intro: 'Thank you for choosing CarValueAI for your vehicle valuation needs. We are pleased to provide you with your comprehensive {plan} plan analysis.',
+    vehicleDetails: 'Vehicle Details',
+    brand: 'Brand',
+    model: 'Model',
+    year: 'Year',
+    mileage: 'Mileage',
+    fuelType: 'Fuel Type',
+    transmission: 'Transmission',
+    vin: 'VIN',
+    valuationSummary: 'Valuation Summary',
+    estimatedValue: 'Estimated Market Value',
+    confidence: 'Confidence Level',
+    marketTrend: 'Market Trend',
+    footerMessage: 'Thank you for choosing CarValueAI. We appreciate your business and hope our analysis helps you make informed decisions about your vehicle.',
+    signature: 'Your sincerely,<br>The CarValueAI Team',
+    website: 'Visit our website',
+    contact: 'Contact us for any questions',
+    regularFeatures: {
+      title: 'Regular Plan Features',
+      basicValuation: '✓ Basic market valuation',
+      marketComparison: '✓ Market comparison analysis',
+      summary: '✓ Detailed summary report'
+    },
+    premiumFeatures: {
+      title: 'Premium Plan Features',
+      allRegular: '✓ All Regular plan features',
+      historicalData: '✓ 3-month historical market trends',
+      projections: '✓ 3-month future projections',
+      pricingStrategy: '✓ Smart pricing strategy recommendations',
+      seasonalAnalysis: '✓ Seasonal market analysis'
+    },
+    businessFeatures: {
+      title: 'Business Plan Features',
+      allPremium: '✓ All Premium plan features',
+      investmentRisk: '✓ Personal Investment Risk Assessment',
+      dealerAnalysis: '✓ Professional dealer-level analysis',
+      regionalPricing: '✓ Regional market pricing',
+      competitorAnalysis: '✓ Detailed competitor analysis'
+    }
+  },
+  bg: {
+    subject: 'Вашият доклад за оценка на {brand} {model} - CarValueAI {plan} анализ',
+    greeting: 'Уважаеми клиенте,',
+    intro: 'Благодарим Ви, че избрахте CarValueAI за Вашите нужди от оценка на превозно средство. Радваме се да Ви предоставим обширния анализ по {plan} план.',
+    vehicleDetails: 'Детайли за превозното средство',
+    brand: 'Марка',
+    model: 'Модел',
+    year: 'Година',
+    mileage: 'Пробег',
+    fuelType: 'Вид гориво',
+    transmission: 'Скоростна кутия',
+    vin: 'VIN номер',
+    valuationSummary: 'Резюме на оценката',
+    estimatedValue: 'Прогнозна пазарна стойност',
+    confidence: 'Ниво на увереност',
+    marketTrend: 'Пазарна тенденция',
+    footerMessage: 'Благодарим Ви, че избрахте CarValueAI. Оценяваме Вашия бизнес и се надяваме нашият анализ да Ви помогне да вземете обосновани решения относно Вашето превозно средство.',
+    signature: 'С уважение,<br>Екипът на CarValueAI',
+    website: 'Посетете нашия уебсайт',
+    contact: 'Свържете се с нас за въпроси',
+    regularFeatures: {
+      title: 'Характеристики на обикновения план',
+      basicValuation: '✓ Основна пазарна оценка',
+      marketComparison: '✓ Сравнителен пазарен анализ',
+      summary: '✓ Подробен обобщен доклад'
+    },
+    premiumFeatures: {
+      title: 'Характеристики на премиум плана',
+      allRegular: '✓ Всички характеристики от обикновения план',
+      historicalData: '✓ 3-месечни исторически пазарни тенденции',
+      projections: '✓ 3-месечни бъдещи прогнози',
+      pricingStrategy: '✓ Препоръки за интелигентна ценова стратегия',
+      seasonalAnalysis: '✓ Сезонен пазарен анализ'
+    },
+    businessFeatures: {
+      title: 'Характеристики на бизнес плана',
+      allPremium: '✓ Всички характеристики от премиум плана',
+      investmentRisk: '✓ Лична оценка на инвестиционния риск',
+      dealerAnalysis: '✓ Професионален анализ на ниво дилър',
+      regionalPricing: '✓ Регионално пазарно ценообразуване',
+      competitorAnalysis: '✓ Подробен анализ на конкуренцията'
+    }
+  }
+};
+
 export function generateEmailTemplate(data: EmailTemplateData): { subject: string; html: string; text: string } {
-  const { inquiry, valuationResult, planType } = data;
+  const { inquiry, valuationResult, planType, language = 'en' } = data;
+  const t = emailTranslations[language];
   const planName = planType.charAt(0).toUpperCase() + planType.slice(1);
   
-  const subject = `Your ${inquiry.brand} ${inquiry.model} Valuation Report - CarValueAI ${planName} Analysis`;
+  const subject = t.subject
+    .replace('{brand}', inquiry.brand)
+    .replace('{model}', inquiry.model)
+    .replace('{plan}', planName);
   
   const html = `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${language}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarValueAI Valuation Report</title>
+    <title>CarValueAI ${t.valuationSummary}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -197,42 +292,46 @@ export function generateEmailTemplate(data: EmailTemplateData): { subject: strin
         <div class="header">
             <div class="logo">🚗 CarValueAI</div>
             <div class="tagline">Professional Car Valuation Services</div>
-            <div class="plan-badge">${planName} Analysis</div>
+            <div class="plan-badge">${planName} ${language === 'bg' ? 'Анализ' : 'Analysis'}</div>
         </div>
         
         <div class="content">
+            <p style="font-size: 16px; margin-bottom: 25px; color: #4a5568;">${t.greeting}</p>
+            <p style="font-size: 16px; margin-bottom: 30px; color: #4a5568;">${t.intro.replace('{plan}', planName)}</p>
+            
             <div class="vehicle-info">
                 <div class="vehicle-title">${inquiry.year} ${inquiry.brand} ${inquiry.model}</div>
+                <div class="section-title" style="font-size: 18px; margin-bottom: 15px;">${t.vehicleDetails}</div>
                 <div class="vehicle-details">
                     <div class="detail-item">
-                        <span class="detail-label">Year:</span>
+                        <span class="detail-label">${t.year}:</span>
                         <span class="detail-value">${inquiry.year}</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Mileage:</span>
+                        <span class="detail-label">${t.mileage}:</span>
                         <span class="detail-value">${inquiry.mileage?.toLocaleString()} km</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Fuel Type:</span>
+                        <span class="detail-label">${t.fuelType}:</span>
                         <span class="detail-value">${inquiry.fuelType}</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Transmission:</span>
+                        <span class="detail-label">${t.transmission}:</span>
                         <span class="detail-value">${inquiry.transmission}</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">VIN:</span>
+                        <span class="detail-label">${t.vin}:</span>
                         <span class="detail-value">${inquiry.vin}</span>
                     </div>
                 </div>
             </div>
             
             <div class="valuation-section">
-                <div class="section-title">Market Valuation</div>
+                <div class="section-title">${t.valuationSummary}</div>
                 <div class="price-box">
-                    <div class="price-label">Estimated Market Value</div>
+                    <div class="price-label">${t.estimatedValue}</div>
                     <div class="price-value">€${valuationResult?.marketValue?.toLocaleString() || 'N/A'}</div>
-                    <div class="confidence-level">Confidence Level: ${valuationResult?.confidenceLevel || 90}%</div>
+                    <div class="confidence-level">${t.confidence}: ${valuationResult?.confidenceLevel || 90}%</div>
                 </div>
             </div>
             
@@ -277,14 +376,16 @@ export function generateEmailTemplate(data: EmailTemplateData): { subject: strin
         
         <div class="footer">
             <div class="footer-message">
-                Thank you for choosing CarValueAI for your vehicle valuation needs. We're committed to providing you with the most accurate and comprehensive market analysis available in Bulgaria. Your trust in our expertise drives us to continuously improve our services and deliver exceptional value to every client.
+                ${t.footerMessage}
             </div>
             <div class="signature">
-                Your sincerely,<br>
-                <strong>The CarValueAI Team</strong>
+                ${t.signature}
             </div>
             <div class="disclaimer">
-                This valuation is based on current market conditions and data available at the time of analysis. Market values may fluctuate due to various factors. CarValueAI provides estimates for informational purposes and cannot guarantee exact selling prices. Valid for 30 days from issue date.
+                ${language === 'bg' ? 
+                  'Тази оценка се базира на текущите пазарни условия и данни, налични по време на анализа. Пазарните стойности могат да колебаят поради различни фактори. CarValueAI предоставя оценки за информационни цели и не може да гарантира точни продажни цени. Валидна е 30 дни от датата на издаване.' :
+                  'This valuation is based on current market conditions and data available at the time of analysis. Market values may fluctuate due to various factors. CarValueAI provides estimates for informational purposes and cannot guarantee exact selling prices. Valid for 30 days from issue date.'
+                }
             </div>
         </div>
     </div>
