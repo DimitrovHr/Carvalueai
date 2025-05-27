@@ -50,40 +50,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: "pending",
       });
       
-      // Send notification email if configured
-      const adminSettings = await storage.getAdminSettings();
-      if (adminSettings?.notificationEmail) {
-        const transporter = nodemailer.createTransport({
-          host: "smtp.ethereal.email",
-          port: 587,
-          secure: false,
-          auth: {
-            user: process.env.EMAIL_USER || "ethereal.user@ethereal.email",
-            pass: process.env.EMAIL_PASS || "ethereal.pass",
-          },
-        });
+      // Send notification email if configured (optional)
+      try {
+        const adminSettings = await storage.getAdminSettings();
+        if (adminSettings?.notificationEmail && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+          const transporter = nodemailer.createTransport({
+            host: "smtp.ethereal.email",
+            port: 587,
+            secure: false,
+            auth: {
+              user: process.env.EMAIL_USER,
+              pass: process.env.EMAIL_PASS,
+            },
+          });
 
-        await transporter.sendMail({
-          from: '"CarValueAI" <info@carvalueai.com>',
-          to: adminSettings.notificationEmail,
-          subject: `New Car Inquiry: ${carDetails.vin}`,
-          text: `
-            New car inquiry submitted:
-            VIN: ${carDetails.vin}
-            Mileage: ${carDetails.mileage}
-            Fuel Type: ${carDetails.fuelType}
-            Transmission: ${carDetails.transmission}
-            Status: Pending payment
-          `,
-          html: `
-            <h2>New Car Inquiry Submitted</h2>
-            <p><strong>VIN:</strong> ${carDetails.vin}</p>
-            <p><strong>Mileage:</strong> ${carDetails.mileage} km</p>
-            <p><strong>Fuel Type:</strong> ${carDetails.fuelType}</p>
-            <p><strong>Transmission:</strong> ${carDetails.transmission}</p>
-            <p><strong>Status:</strong> Pending payment</p>
-          `,
-        });
+          await transporter.sendMail({
+            from: '"CarValueAI" <info@carvalueai.com>',
+            to: adminSettings.notificationEmail,
+            subject: `New Car Inquiry: ${carDetails.vin}`,
+            text: `
+              New car inquiry submitted:
+              VIN: ${carDetails.vin}
+              Mileage: ${carDetails.mileage}
+              Fuel Type: ${carDetails.fuelType}
+              Transmission: ${carDetails.transmission}
+              Status: Pending payment
+            `,
+            html: `
+              <h2>New Car Inquiry Submitted</h2>
+              <p><strong>VIN:</strong> ${carDetails.vin}</p>
+              <p><strong>Mileage:</strong> ${carDetails.mileage} km</p>
+              <p><strong>Fuel Type:</strong> ${carDetails.fuelType}</p>
+              <p><strong>Transmission:</strong> ${carDetails.transmission}</p>
+              <p><strong>Status:</strong> Pending payment</p>
+            `,
+          });
+        }
+      } catch (emailError) {
+        console.log("Email notification skipped (no credentials configured)");
       }
 
       return res.status(201).json(inquiry);
