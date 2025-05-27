@@ -33,6 +33,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Check, Download, Mail, Loader2, CheckCircle } from "lucide-react";
 import PayPalButton from "@/components/PayPalButton";
 import ValuationChart from "@/components/ValuationChart";
+import { CAR_BRANDS_MODELS, CAR_TYPES, FUEL_TYPES, TRANSMISSION_TYPES, YEARS } from "@/lib/car-data";
 
 export default function CarValuationForm() {
   const [step, setStep] = useState(0);
@@ -40,6 +41,7 @@ export default function CarValuationForm() {
   const [selectedPlan, setSelectedPlan] = useState<'regular' | 'premium'>('regular');
   const [paymentMethod, setPaymentMethod] = useState<'paypal' | 'revolut' | null>(null);
   const [paymentId, setPaymentId] = useState<string | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<string>("");
   const [location, navigate] = useLocation();
   const { toast } = useToast();
 
@@ -50,6 +52,10 @@ export default function CarValuationForm() {
     resolver: zodResolver(carDetailsSchema),
     defaultValues: {
       vin: "",
+      brand: "",
+      model: "",
+      year: undefined,
+      carType: undefined,
       mileage: undefined,
       fuelType: undefined,
       transmission: undefined,

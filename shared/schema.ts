@@ -23,6 +23,10 @@ export const insertUserSchema = createInsertSchema(users).pick({
 export const carInquiries = pgTable("car_inquiries", {
   id: serial("id").primaryKey(),
   vin: varchar("vin", { length: 17 }).notNull(),
+  brand: varchar("brand", { length: 100 }).notNull(),
+  model: varchar("model", { length: 100 }).notNull(),
+  year: integer("year").notNull(),
+  carType: varchar("car_type", { length: 50 }).notNull(),
   mileage: integer("mileage").notNull(),
   fuelType: varchar("fuel_type", { length: 20 }).notNull(),
   transmission: varchar("transmission", { length: 20 }).notNull(),
@@ -79,6 +83,12 @@ export type InsertAdminSettings = z.infer<typeof insertAdminSettingsSchema>;
 // Validation schemas for forms
 export const carDetailsSchema = z.object({
   vin: z.string().length(17, "VIN must be exactly 17 characters").nonempty("VIN is required"),
+  brand: z.string().min(1, "Brand is required"),
+  model: z.string().min(1, "Model is required"),
+  year: z.number().min(1990, "Year must be 1990 or later").max(new Date().getFullYear() + 1, "Year cannot be in the future"),
+  carType: z.enum(["sedan", "hatchback", "wagon", "suv", "coupe", "convertible", "pickup", "van", "minivan"], {
+    errorMap: () => ({ message: "Please select a car type" }),
+  }),
   mileage: z.number().min(1, "Mileage must be greater than 0").max(1000000, "Mileage too high"),
   fuelType: z.enum(["petrol", "diesel", "electric", "hybrid", "lpg"], {
     errorMap: () => ({ message: "Please select a fuel type" }),
