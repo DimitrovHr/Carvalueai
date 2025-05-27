@@ -229,6 +229,123 @@ export default function CarValuationForm() {
 
                         <FormField
                           control={carDetailsForm.control}
+                          name="brand"
+                          render={({ field }) => (
+                            <FormItem className="sm:col-span-3">
+                              <FormLabel>Brand</FormLabel>
+                              <Select 
+                                onValueChange={(value) => {
+                                  field.onChange(value);
+                                  setSelectedBrand(value);
+                                  carDetailsForm.setValue("model", ""); // Reset model when brand changes
+                                }}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select car brand" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="max-h-60">
+                                  {Object.keys(CAR_BRANDS_MODELS).map((brand) => (
+                                    <SelectItem key={brand} value={brand}>
+                                      {brand}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={carDetailsForm.control}
+                          name="model"
+                          render={({ field }) => (
+                            <FormItem className="sm:col-span-3">
+                              <FormLabel>Model</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange} 
+                                defaultValue={field.value}
+                                disabled={!selectedBrand}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder={selectedBrand ? "Select model" : "Select brand first"} />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="max-h-60">
+                                  {selectedBrand && CAR_BRANDS_MODELS[selectedBrand as keyof typeof CAR_BRANDS_MODELS]?.map((model) => (
+                                    <SelectItem key={model} value={model}>
+                                      {model}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={carDetailsForm.control}
+                          name="year"
+                          render={({ field }) => (
+                            <FormItem className="sm:col-span-3">
+                              <FormLabel>Year</FormLabel>
+                              <Select 
+                                onValueChange={(value) => field.onChange(parseInt(value))}
+                                defaultValue={field.value?.toString()}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select year" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="max-h-60">
+                                  {YEARS.map((year) => (
+                                    <SelectItem key={year.value} value={year.value.toString()}>
+                                      {year.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={carDetailsForm.control}
+                          name="carType"
+                          render={({ field }) => (
+                            <FormItem className="sm:col-span-3">
+                              <FormLabel>Car Type</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange} 
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select car type" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {CAR_TYPES.map((type) => (
+                                    <SelectItem key={type.value} value={type.value}>
+                                      {type.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={carDetailsForm.control}
                           name="mileage"
                           render={({ field }) => (
                             <FormItem className="sm:col-span-3">

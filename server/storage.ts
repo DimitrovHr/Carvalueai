@@ -145,6 +145,10 @@ export class DatabaseStorage implements IStorage {
     try {
       const [newInquiry] = await db.insert(carInquiries).values({
         vin: inquiry.vin || '',
+        brand: inquiry.brand || '',
+        model: inquiry.model || '',
+        year: inquiry.year || new Date().getFullYear(),
+        carType: inquiry.carType || 'sedan',
         mileage: inquiry.mileage || 0,
         fuelType: inquiry.fuelType || 'petrol',
         transmission: inquiry.transmission || 'manual',
