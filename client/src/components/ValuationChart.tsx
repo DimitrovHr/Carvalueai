@@ -25,6 +25,8 @@ interface ValuationChartProps {
   forecast?: {
     month: string;
     value: number;
+    confidence?: number;
+    trend?: string;
   }[];
   marketTrend?: number; // percentage change
   compareData?: {
@@ -33,7 +35,24 @@ interface ValuationChartProps {
     comparableValue: number;
     marketAverage: number;
   }[];
-  chartType?: 'bar' | 'line' | 'area' | 'comparison';
+  chartType?: 'bar' | 'line' | 'area' | 'comparison' | 'trend_analysis';
+  trendAnalysis?: {
+    historicalTrendPercentage: number;
+    futureTrendPercentage: number;
+    marketMomentum: string;
+    volatility: string;
+    bestTimeToSell: string;
+  };
+  marketInsights?: {
+    demand: string;
+    seasonalFactor: string;
+    competitivePosition: string;
+    priceRecommendation: {
+      quickSale: number;
+      marketPrice: number;
+      premiumPrice: number;
+    };
+  };
 }
 
 export default function ValuationChart({ 
