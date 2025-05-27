@@ -23,6 +23,7 @@ export interface IStorage {
   getAllInquiries(): Promise<CarInquiry[]>;
   createInquiry(inquiry: Partial<InsertCarInquiry> & { userId?: number | null, trialPeriod?: boolean }): Promise<CarInquiry>;
   updateInquiry(id: number, data: Partial<CarInquiry>): Promise<CarInquiry>;
+  deleteInquiry(id: number): Promise<void>;
   
   // Admin settings methods
   getAdminSettings(): Promise<AdminSettings | undefined>;

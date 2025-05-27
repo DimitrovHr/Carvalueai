@@ -28,6 +28,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.delete("/api/inquiries/:id", async (req, res) => {
+    try {
+      const inquiryId = parseInt(req.params.id);
+      
+      if (isNaN(inquiryId)) {
+        return res.status(400).json({ message: "Invalid inquiry ID" });
+      }
+
+      // Check if inquiry exists
+      const inquiry = await storage.getInquiry(inquiryId);
+      if (!inquiry) {
+        return res.status(404).json({ message: "Inquiry not found" });
+      }
+
+      // Delete the inquiry
+      await storage.deleteInquiry(inquiryId);
+      
+      return res.status(200).json({ message: "Inquiry deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting inquiry:", error);
+      return res.status(500).json({ message: "Failed to delete inquiry" });
+    }
+  });
+
   app.get("/api/inquiries/:id", async (req, res) => {
     try {
       const inquiry = await storage.getInquiry(parseInt(req.params.id));

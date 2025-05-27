@@ -113,6 +113,35 @@ export default function Admin() {
     }
   });
 
+  // Delete inquiry mutation
+  const deleteInquiryMutation = useMutation({
+    mutationFn: async (inquiryId: number) => {
+      const res = await apiRequest('DELETE', `/api/inquiries/${inquiryId}`);
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Inquiry deleted",
+        description: "The inquiry has been successfully deleted.",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/inquiries'] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error deleting inquiry",
+        description: error.message || "An error occurred while deleting the inquiry.",
+        variant: "destructive"
+      });
+    }
+  });
+
+  // Handle delete inquiry
+  const handleDeleteInquiry = (inquiryId: number) => {
+    if (window.confirm('Are you sure you want to delete this inquiry? This action cannot be undone.')) {
+      deleteInquiryMutation.mutate(inquiryId);
+    }
+  };
+
   // Test valuation mutation
   const testValuationMutation = useMutation({
     mutationFn: async (data: z.infer<typeof carDetailsSchema>) => {
@@ -211,7 +240,16 @@ export default function Admin() {
                               </span>
                             </TableCell>
                             <TableCell>
-                              <Button variant="link" size="sm">View</Button>
+                              <div className="flex space-x-2">
+                                <Button variant="link" size="sm">View</Button>
+                                <Button 
+                                  variant="destructive" 
+                                  size="sm"
+                                  onClick={() => handleDeleteInquiry(inquiry.id)}
+                                >
+                                  Delete
+                                </Button>
+                              </div>
                             </TableCell>
                           </TableRow>
                         ))}
