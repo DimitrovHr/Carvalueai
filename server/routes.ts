@@ -410,53 +410,153 @@ export async function registerRoutes(app: Express): Promise<Server> {
   return httpServer;
 }
 
+// Brand value multipliers based on market positioning
+const BRAND_VALUE_MULTIPLIERS = {
+  // Luxury brands
+  'BMW': 1.4, 'Mercedes-Benz': 1.45, 'Audi': 1.35, 'Lexus': 1.3, 'Porsche': 2.2,
+  'Jaguar': 1.25, 'Land Rover': 1.3, 'Volvo': 1.15, 'Infiniti': 1.2, 'Acura': 1.15,
+  'Cadillac': 1.1, 'Tesla': 1.6, 'Maserati': 1.8, 'Ferrari': 3.5, 'Lamborghini': 3.2,
+  'Rolls-Royce': 4.0,
+  
+  // Premium brands
+  'Volkswagen': 1.1, 'Toyota': 1.2, 'Honda': 1.15, 'Mazda': 1.05, 'Subaru': 1.1,
+  'Hyundai': 1.0, 'Kia': 0.95, 'Genesis': 1.25, 'Mini': 1.15,
+  
+  // Mainstream brands
+  'Ford': 0.9, 'Opel': 0.85, 'Renault': 0.9, 'Peugeot': 0.9, 'Citroën': 0.85,
+  'Skoda': 0.95, 'SEAT': 0.9, 'Fiat': 0.8, 'Nissan': 0.95, 'Mitsubishi': 0.85,
+  'Chevrolet': 0.8, 'Dacia': 0.7, 'Suzuki': 0.8,
+  
+  // Specialty/Niche brands
+  'Jeep': 1.05, 'Saab': 0.75, 'Alfa Romeo': 0.9, 'Lancia': 0.7
+};
+
+// Car type value multipliers
+const CAR_TYPE_MULTIPLIERS = {
+  'suv': 1.15,
+  'coupe': 1.1,
+  'convertible': 1.2,
+  'wagon': 1.05,
+  'sedan': 1.0,
+  'hatchback': 0.95,
+  'pickup': 1.1,
+  'van': 0.9,
+  'minivan': 0.85
+};
+
+// Base values by fuel type (updated for 2024 market)
+const FUEL_TYPE_BASE_VALUES = {
+  'electric': 28000,
+  'hybrid': 22000,
+  'diesel': 16000,
+  'petrol': 14000,
+  'lpg': 12000
+};
+
 // Helper functions to generate valuation results
 function generateRegularValuationResult(inquiry: any) {
-  // Calculate market value based on mileage, fuel type, and transmission
-  let baseValue = 0;
+  // 1. Start with base value from fuel type
+  const baseValue = FUEL_TYPE_BASE_VALUES[inquiry.fuelType] || 14000;
   
-  // Base value determined by fuel type
-  switch (inquiry.fuelType) {
-    case 'diesel':
-      baseValue = 15000;
-      break;
-    case 'petrol':
-      baseValue = 13500;
-      break;
-    case 'hybrid':
-      baseValue = 20000;
-      break;
-    case 'electric':
-      baseValue = 25000;
-      break;
-    case 'lpg':
-      baseValue = 12000;
-      break;
-    default:
-      baseValue = 14000;
+  // 2. Apply brand multiplier
+  const brandMultiplier = BRAND_VALUE_MULTIPLIERS[inquiry.brand] || 1.0;
+  
+  // 3. Apply car type multiplier
+  const carTypeMultiplier = CAR_TYPE_MULTIPLIERS[inquiry.carType] || 1.0;
+  
+  // 4. Calculate age depreciation (assuming current year is 2024)
+  const currentYear = new Date().getFullYear();
+  const vehicleAge = currentYear - (inquiry.year || currentYear);
+  const ageFactor = Math.max(0.15, 1 - (vehicleAge * 0.08)); // 8% depreciation per year, minimum 15%
+  
+  // 5. Calculate mileage depreciation
+  const mileageFactor = Math.max(0.4, 1 - (inquiry.mileage / 350000)); // More realistic mileage factor
+  
+  // 6. Apply transmission multiplier
+  const transmissionMultiplier = inquiry.transmission === 'automatic' ? 1.12 : 
+                                inquiry.transmission === 'semi-automatic' ? 1.06 : 1.0;
+  
+  // 7. VIN-based features bonus (if VIN provided)
+  let vinFeaturesBonus = 0;
+  let detectedFeatures = [];
+  
+  if (inquiry.vin && inquiry.vin.length >= 10) {
+    // Basic VIN analysis (in production, this would call a real VIN decoder API)
+    detectedFeatures = analyzeVINFeatures(inquiry.vin);
+    vinFeaturesBonus = detectedFeatures.reduce((total, feature) => total + feature.value, 0);
   }
   
-  // Adjust for mileage (higher mileage means lower value)
-  const mileageFactor = Math.max(0.6, 1 - (inquiry.mileage / 300000));
-  
-  // Adjust for transmission (automatic typically has higher value)
-  const transmissionFactor = inquiry.transmission === 'automatic' ? 1.1 : 
-                            inquiry.transmission === 'semi-automatic' ? 1.05 : 1;
-  
-  // Calculate final value
-  const marketValue = Math.round(baseValue * mileageFactor * transmissionFactor);
+  // 8. Calculate final market value
+  let marketValue = baseValue * brandMultiplier * carTypeMultiplier * ageFactor * mileageFactor * transmissionMultiplier;
+  marketValue += vinFeaturesBonus;
+  marketValue = Math.round(marketValue);
   
   return {
     marketValue,
     currency: "EUR",
     validUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
     vehicleDetails: {
+      brand: inquiry.brand,
+      model: inquiry.model,
+      year: inquiry.year,
+      carType: inquiry.carType,
       vin: inquiry.vin,
       mileage: inquiry.mileage,
       fuelType: inquiry.fuelType,
       transmission: inquiry.transmission
+    },
+    valuationBreakdown: {
+      baseValue: Math.round(baseValue),
+      brandAdjustment: `${Math.round((brandMultiplier - 1) * 100)}%`,
+      carTypeAdjustment: `${Math.round((carTypeMultiplier - 1) * 100)}%`,
+      ageDepreciation: `${Math.round((1 - ageFactor) * 100)}%`,
+      mileageDepreciation: `${Math.round((1 - mileageFactor) * 100)}%`,
+      transmissionBonus: `${Math.round((transmissionMultiplier - 1) * 100)}%`,
+      vinFeaturesBonus: `+€${vinFeaturesBonus}`,
+      detectedFeatures: detectedFeatures
     }
   };
+}
+
+// VIN analysis function (simulates real VIN decoder)
+function analyzeVINFeatures(vin: string) {
+  const features = [];
+  
+  // Simulate VIN decoding based on VIN characters (in production, use real VIN API)
+  const vinUpper = vin.toUpperCase();
+  
+  // Check for luxury package indicators
+  if (vinUpper.includes('L') || vinUpper.includes('X')) {
+    features.push({ name: 'Luxury Package', value: 2500 });
+  }
+  
+  // Check for sport package indicators
+  if (vinUpper.includes('S') || vinUpper.includes('M')) {
+    features.push({ name: 'Sport Package', value: 1800 });
+  }
+  
+  // Check for navigation system indicators
+  if (vinUpper.includes('N') || vinUpper.includes('G')) {
+    features.push({ name: 'Navigation System', value: 1200 });
+  }
+  
+  // Check for premium sound system
+  if (vinUpper.includes('P') || vinUpper.includes('H')) {
+    features.push({ name: 'Premium Audio', value: 800 });
+  }
+  
+  // Check for sunroof indicators
+  if (vinUpper.includes('R') || vinUpper.includes('T')) {
+    features.push({ name: 'Sunroof/Panoramic Roof', value: 1500 });
+  }
+  
+  // Check for AWD indicators
+  if (vinUpper.includes('4') || vinUpper.includes('W')) {
+    features.push({ name: 'All-Wheel Drive', value: 3000 });
+  }
+  
+  // Limit to most valuable features to avoid over-valuation
+  return features.slice(0, 3);
 }
 
 function generatePremiumValuationResult(inquiry: any) {
