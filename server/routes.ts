@@ -297,6 +297,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  // Test bilingual email generation
+  app.get("/api/test-bilingual-emails", async (req, res) => {
+    try {
+      // Sample test inquiry data
+      const testInquiry = {
+        id: 1,
+        vin: "WBAPL33549A000001",
+        brand: "BMW",
+        model: "530d",
+        year: 2017,
+        mileage: 193000,
+        fuelType: "diesel",
+        transmission: "automatic",
+        carType: "wagon",
+        visibleDamages: "Minor scratches on rear bumper",
+        mechanicalDamages: "None",
+        additionalInfo: "Station wagon body style, well maintained",
+        createdAt: new Date(),
+        planType: "business",
+        status: "test"
+      };
+
+      const businessValuation = generateBusinessValuationResult(testInquiry);
+
+      // Generate English email
+      const englishEmail = generateEmailTemplate({
+        inquiry: testInquiry,
+        valuationResult: businessValuation,
+        planType: 'business',
+        customerEmail: 'test@example.com',
+        language: 'en'
+      });
+
+      // Generate Bulgarian email
+      const bulgarianEmail = generateEmailTemplate({
+        inquiry: testInquiry,
+        valuationResult: businessValuation,
+        planType: 'business',
+        customerEmail: 'test@example.com',
+        language: 'bg'
+      });
+
+      return res.json({
+        success: true,
+        testResults: {
+          vehicleInfo: `${testInquiry.year} ${testInquiry.brand} ${testInquiry.model}`,
+          english: {
+            subject: englishEmail.subject,
+            language: 'en',
+            preview: englishEmail.text.substring(0, 200) + '...'
+          },
+          bulgarian: {
+            subject: bulgarianEmail.subject,
+            language: 'bg',
+            preview: bulgarianEmail.text.substring(0, 200) + '...'
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Error testing bilingual emails:", error);
+      return res.status(500).json({ message: "Failed to test bilingual emails", error: error.message });
+    }
+  });
+
   // Special test endpoint for the BMW 530d example
   app.get("/api/bmw-test-valuation", async (req, res) => {
     try {
