@@ -1,4 +1,4 @@
-import { useSimpleAuth } from "@/hooks/use-simple-auth";
+import { useFrontendAuth } from "@/hooks/use-frontend-auth";
 import { Loader2 } from "lucide-react";
 import { Redirect, Route, RouteProps } from "wouter";
 
@@ -11,7 +11,7 @@ export function ProtectedRoute({
   component: React.ComponentType;
   adminOnly?: boolean;
 }) {
-  const { user, isLoading } = useSimpleAuth();
+  const { user, isLoading } = useFrontendAuth();
 
   if (isLoading) {
     return (

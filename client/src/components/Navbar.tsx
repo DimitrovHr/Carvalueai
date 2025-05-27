@@ -30,7 +30,7 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    logoutMutation.mutate();
+    logout();
   };
 
   const navLinks = [
