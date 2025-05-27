@@ -114,11 +114,7 @@ export default function FrontendAuthPage() {
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         Sign In
                       </Button>
-                      <div className="text-sm text-gray-600 mt-4 p-3 bg-blue-50 rounded">
-                        <strong>Admin Access:</strong><br />
-                        Email: admin@carvalueai.com<br />
-                        Password: admin123
-                      </div>
+                      
                     </form>
                   </Form>
                 </TabsContent>
