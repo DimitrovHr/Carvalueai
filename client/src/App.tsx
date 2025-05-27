@@ -12,8 +12,8 @@ import Footer from "@/components/Footer";
 import { LanguageProvider } from "./context/LanguageContext";
 import { OnboardingProvider } from "./context/OnboardingContext";
 import { useState } from "react";
-import AuthPage from "./pages/AuthPage";
-import { SimpleAuthProvider } from "./hooks/use-simple-auth";
+import FrontendAuthPage from "./pages/FrontendAuthPage";
+import { FrontendAuthProvider } from "./hooks/use-frontend-auth";
 import { ProtectedRoute } from "./lib/protected-route";
 import BMWTest from "@/pages/BMWTest";
 
@@ -21,7 +21,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/auth" component={AuthPage} />
+      <Route path="/auth" component={FrontendAuthPage} />
       <Route path="/bmw-test" component={BMWTest} />
       <ProtectedRoute path="/valuation" component={CarValuationForm} />
       <ProtectedRoute path="/admin" component={Admin} adminOnly={true} />
@@ -34,7 +34,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <SimpleAuthProvider>
+        <FrontendAuthProvider>
           <TooltipProvider>
             <OnboardingProvider>
               <div className="flex flex-col min-h-screen">
@@ -47,7 +47,7 @@ function App() {
               <Toaster />
             </OnboardingProvider>
           </TooltipProvider>
-        </SimpleAuthProvider>
+        </FrontendAuthProvider>
       </LanguageProvider>
     </QueryClientProvider>
   );

@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { LanguageContext } from "../context/LanguageContext";
-import { useSimpleAuth } from "@/hooks/use-simple-auth";
+import { useFrontendAuth } from "@/hooks/use-frontend-auth";
 import OnboardingButton from "./OnboardingButton";
 import { useTranslation } from "@/hooks/use-translation";
 
@@ -18,7 +18,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useLocation();
   const { language, setLanguage } = useContext(LanguageContext);
-  const { user, logoutMutation } = useSimpleAuth();
+  const { user, logout } = useFrontendAuth();
   const { t } = useTranslation();
 
   const toggleMenu = () => {
