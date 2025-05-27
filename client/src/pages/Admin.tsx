@@ -145,13 +145,24 @@ export default function Admin() {
   // Approve inquiry mutation
   const approveInquiryMutation = useMutation({
     mutationFn: async (inquiryId: number) => {
-      const res = await apiRequest('PATCH', `/api/inquiries/${inquiryId}`, { status: 'completed' });
+      // First generate valuation for business plan
+      const valuationRes = await apiRequest('POST', `/api/inquiries/${inquiryId}/generate-valuation`, { 
+        planType: 'business', 
+        customerEmail: 'client@example.com' 
+      });
+      
+      // Then mark as completed
+      const res = await apiRequest('PATCH', `/api/inquiries/${inquiryId}`, { 
+        status: 'completed',
+        planType: 'business'
+      });
+      
       return res.json();
     },
     onSuccess: () => {
       toast({
-        title: "Inquiry approved",
-        description: "The inquiry has been approved and marked as completed.",
+        title: "Valuation approved & sent",
+        description: "The inquiry has been approved, valuation generated, and email sent to client.",
       });
       queryClient.invalidateQueries({ queryKey: ['/api/inquiries'] });
     },
@@ -166,7 +177,7 @@ export default function Admin() {
 
   // Handle approve inquiry
   const handleApproveInquiry = (inquiryId: number) => {
-    if (window.confirm('Are you sure you want to approve this inquiry? This will mark it as completed.')) {
+    if (window.confirm('Are you sure you want to approve this inquiry? This will generate a Business plan valuation and send it to the client via email.')) {
       approveInquiryMutation.mutate(inquiryId);
     }
   };
@@ -293,7 +304,7 @@ export default function Admin() {
                                 >
                                   View
                                 </Button>
-                                {inquiry.paymentCompleted && inquiry.status !== 'completed' && (
+                                {inquiry.status !== 'completed' && (
                                   <Button 
                                     variant="default" 
                                     size="sm"
@@ -301,7 +312,7 @@ export default function Admin() {
                                     className="bg-green-600 hover:bg-green-700 text-white mr-1"
                                   >
                                     <CheckCircle className="w-3 h-3 mr-1" />
-                                    Approve
+                                    Approve & Send
                                   </Button>
                                 )}
                                 <Button 
